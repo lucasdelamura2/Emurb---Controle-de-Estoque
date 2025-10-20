@@ -1,0 +1,22 @@
+@model EmurbEstoque.Models.Funcionario
+@{ ViewData["Title"] = "Editar"; Layout = "_Layout"; }
+<h1>Editar Funcionário</h1>
+
+<form asp-action="Edit" method="post">
+  <input type="hidden" name="Id" value="@Model.Id" />
+  <div class="mb-3">
+    <label class="form-label" for="Nome">Nome</label>
+    <input class="form-control" id="Nome" name="Nome" value="@Model.Nome" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="CPF">CPF</label>
+    <input class="form-control" id="CPF" name="CPF" value="@Model.CPF" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="DataNascimento">Data de Nascimento</label>
+    <input class="form-control" id="DataNascimento" name="DataNascimento" type="date"
+           value="@Model.DataNascimento.ToString("yyyy-MM-dd")" />
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">Cancelar</a>
+</form>
