@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Início";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">Sistema de Controle de Estoques</h1>
+        <p class="text-muted">Gerencie de forma prática os produtos, funcionários e movimentações do estoque.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Controle de Estoque</h5>
+                    <p class="card-text">Cadastre, consulte e atualize os itens disponíveis no estoque.</p>
+                    <a asp-controller="Estoque" asp-action="Index" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">👥 Funcionários</h5>
+                    <p class="card-text">Gerencie os funcionários cadastrados no sistema.</p>
+                    <a asp-controller="Funcionario" asp-action="Index" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📊 Relatórios</h5>
+                    <p class="card-text">Visualize relatórios e estatísticas de movimentação do estoque.</p>
+                    <a asp-controller="Relatorios" asp-action="Index" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="mt-5 py-3 bg-dark text-white text-center">
+    <p>© 2025 - Sistema de Controle de Estoques</p>
+</footer>
