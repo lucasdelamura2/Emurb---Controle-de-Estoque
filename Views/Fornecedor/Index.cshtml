@@ -1,0 +1,52 @@
+@model List<EmurbEstoque.Models.Fornecedor>
+
+@{
+    ViewData["Title"] = "Fornecedores";
+    Layout = "~/Views/_Layout.cshtml"; 
+}
+
+<h1>Fornecedores (@Model.Count)</h1>
+
+<p>
+    <a class="btn btn-primary" href="/Fornecedor/Create">
+        <i class="bi bi-plus-circle me-1"></i> Adicionar Fornecedor
+    </a>
+</p>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF/CNPJ</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Inscrição Estadual</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var f in Model)
+        {
+            <tr>
+                <td>@f.Id</td>
+                <td>@f.Nome</td>
+                <td>@f.CpfCnpj</td>
+                <td>@f.Email</td>
+                <td>@f.Telefone</td>
+                <td>@f.InscricaoEstadual</td>
+                <td class="text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary" href="/Fornecedor/Details/@f.Id" title="Detalhes">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <a class="btn btn-sm btn-outline-warning" href="/Fornecedor/Edit/@f.Id" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a class="btn btn-sm btn-outline-danger" href="/Fornecedor/Delete/@f.Id" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
