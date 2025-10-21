@@ -1,34 +1,55 @@
 @model List<EmurbEstoque.Models.Funcionario>
 
-<html>
-<head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body class="container-fluid">
-  <h1>Funcionários</h1>
-  <p>@Model.Count</p>
+@{
+    ViewData["Title"] = "Funcionários";
+    Layout = "~/Views/_Layout.cshtml"; 
+}
 
-  <table class="table table-hover">
-    <thead><tr><th>Id</th><th>Nome</th><th>CPF</th><th>Nascimento</th><th></th></tr></thead>
+<h1>Funcionários (@Model.Count)</h1>
+
+<p>
+    <a class="btn btn-primary" href="/Funcionario/Create">
+        <i class="bi bi-plus-circle me-1"></i> Adicionar Funcionário
+    </a>
+</p>
+
+<table class="table table-hover table-striped">
+    
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF/CNPJ</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Cargo</th>
+            <th>Setor</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
     <tbody>
-    @foreach (var f in Model)
-    {
-      <tr>
-        <td>@f.Id</td>
-        <td>@f.Nome</td>
-        <td>@f.CPF</td>
-        <td>@f.DataNascimento.ToString("dd/MM/yyyy")</td>
-        <td class="text-nowrap">
-          <a class="btn btn-sm btn-outline-primary" href="/Funcionario/Details/@f.Id">Detalhes</a>
-          <a class="btn btn-sm btn-outline-warning" href="/Funcionario/Edit/@f.Id">Editar</a>
-          <a class="btn btn-sm btn-outline-danger" href="/Funcionario/Delete/@f.Id">Excluir</a>
-        </td>
-      </tr>
-    }
+        @foreach (var f in Model)
+        {
+            <tr>
+                <td>@f.Id</td>
+                <td>@f.Nome</td>
+                <td>@f.CpfCnpj</td>
+                <td>@f.Email</td>
+                <td>@f.Telefone</td>
+                <td>@f.Cargo</td>
+                <td>@f.Setor</td>
+                <td class="text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary" href="/Funcionario/Details/@f.Id" title="Detalhes">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <a class="btn btn-sm btn-outline-warning" href="/Funcionario/Edit/@f.Id" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a class="btn btn-sm btn-outline-danger" href="/Funcionario/Delete/@f.Id" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
-  </table>
-
-  <a class="btn btn-primary" href="/Funcionario/Create">Adicionar</a>
-</body>
-</html>
+</table>
