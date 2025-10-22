@@ -5,7 +5,7 @@ namespace EmurbEstoque.Controllers;
 
 public class FornecedorController : Controller
 {
-    public static readonly List<Fornecedor> _mem = new();
+    private static readonly List<Fornecedor> _mem = new();
     private static int _nextId = 1;
 
     public IActionResult Index()

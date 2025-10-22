@@ -10,95 +10,42 @@
     </div>
 
     <div class="row g-4">
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
+        <div class="col-md-4">
+            <div class="card text-center">
                 <div class="card-body">
-                    <i class="fas fa-box-open fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">Produtos</h5>
-                    <p class="card-text">Cadastre os produtos que sua empresa utiliza.</p>
-                    <a asp-controller="Produto" asp-action="Index" class="btn btn-primary">Acessar</a>
+                    <h5 class="card-title">📦 Controle de Estoque</h5>
+                    <p class="card-text">Cadastre, consulte e atualize os itens disponíveis no estoque.</p>
+                    <a asp-controller="Estoque" asp-action="Index" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
+        <div class="col-md-4">
+            <div class="card text-center">
                 <div class="card-body">
-                    <i class="fas fa-arrow-down fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Ordem de Entrada</h5>
-                    <p class="card-text">Registre a entrada de lotes e materiais no estoque.</p>
-                    <a asp-controller="OrdemEntrada" asp-action="Index" class="btn btn-primary">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <i class="fas fa-arrow-up fa-3x text-danger mb-3"></i>
-                    <h5 class="card-title">Ordem de Saída</h5>
-                    <p class="card-text">Registre a baixa de materiais e a saída de lotes.</p>
-                    <a asp-controller="OrdemSaida" asp-action="Index" class="btn btn-primary">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <i class="fas fa-users fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">Funcionários</h5>
+                    <h5 class="card-title">👥 Funcionários</h5>
                     <p class="card-text">Gerencie os funcionários cadastrados no sistema.</p>
                     <a asp-controller="Funcionario" asp-action="Index" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
+        <div class="col-md-4">
+            <div class="card text-center">
                 <div class="card-body">
-                    <i class="fas fa-truck-moving fa-3x text-info mb-3"></i>
-                    <h5 class="card-title">Fornecedores</h5>
+                    <h5 class="card-title">🚚 Fornecedores</h5>
                     <p class="card-text">Gerencie os fornecedores de materiais.</p>
                     <a asp-controller="Fornecedor" asp-action="Index" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
+        <div class="col-md-4">
+            <div class="card text-center">
                 <div class="card-body">
-                    <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Locais de Destino</h5>
-                    <p class="card-text">Cadastre as obras ou locais que recebem material.</p>
-                    <a asp-controller="Local" asp-action="Index" class="btn btn-primary">Acessar</a>
+                    <h5 class="card-title">📊 Relatórios</h5>
+                    <p class="card-text">Visualize relatórios e estatísticas de movimentação do estoque.</p>
+                    <a asp-controller="Relatorios" asp-action="Index" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <i class="fas fa-id-badge fa-3x text-dark mb-3"></i>
-                    <h5 class="card-title">Funções Autorizadas</h5>
-                    <p class="card-text">Cadastre os cargos que podem requisitar material.</p>
-                    <a asp-controller="Autorizado" asp-action="Index" class="btn btn-primary">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body">
-                    <i class="fas fa-clipboard-check fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">Autorizações</h5>
-                    <p class="card-text">Defina qual Função pode retirar para qual Local.</p>
-                    <a asp-controller="Autorizacao" asp-action="Index" class="btn btn-primary">Acessar</a>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
