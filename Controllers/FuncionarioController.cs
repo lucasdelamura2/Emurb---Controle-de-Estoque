@@ -5,7 +5,7 @@ namespace EmurbEstoque.Controllers;
 
 public class FuncionarioController : Controller
 {
-    private static readonly List<Funcionario> _mem = new();
+    public static readonly List<Funcionario> _mem = new();
     private static int _nextId = 1;
 
     public IActionResult Index()

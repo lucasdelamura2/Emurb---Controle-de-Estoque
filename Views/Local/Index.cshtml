@@ -1,0 +1,32 @@
+@model List<EmurbEstoque.Models.Local>
+@{
+    ViewData["Title"] = "Locais de Destino";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1>Locais de Destino (@Model.Count)</h1>
+<p>
+    <a class="btn btn-primary" href="/Local/Create">
+        <i class="bi bi-plus-circle me-1"></i> Cadastrar Novo Local
+    </a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdLocal</td>
+                <td>@item.Nome</td>
+                <td>@item.Descricao</td>
+            </tr>
+        }
+    </tbody>
+</table>

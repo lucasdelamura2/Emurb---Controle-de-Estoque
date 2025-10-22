@@ -1,0 +1,42 @@
+@model List<EmurbEstoque.Models.OrdemEntrada>
+@{
+    ViewData["Title"] = "Ordens de Entrada";
+    Layout = "~/Views/_Layout.cshtml";
+    // Dicionário de Fornecedores vindo do Controller
+    var fornecedores = ViewBag.Fornecedores as Dictionary<int, string>;
+}
+
+<h1>Ordens de Entrada (@Model.Count)</h1>
+<p>
+    <a class="btn btn-primary" href="/OrdemEntrada/Create">
+        <i class="bi bi-plus-circle me-1"></i> Nova Ordem de Entrada
+    </a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID da Ordem</th>
+            <th>Fornecedor</th>
+            <th>Data da Entrada</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.IdOrdEnt</td>
+                <td>
+                    @(fornecedores.ContainsKey(o.FornId) ? fornecedores[o.FornId] : "Não encontrado")
+                </td>
+                <td>@o.DataEnt.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="/OrdemEntrada/Details/@o.IdOrdEnt">
+                        <i class="bi bi-list-check me-1"></i> Ver Lotes / Adicionar Itens
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

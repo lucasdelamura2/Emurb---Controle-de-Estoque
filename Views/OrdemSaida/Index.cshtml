@@ -1,0 +1,46 @@
+@model List<EmurbEstoque.Models.OrdemSaida>
+@{
+    ViewData["Title"] = "Ordens de Saída";
+    Layout = "~/Views/_Layout.cshtml";
+    var nomesFuncionarios = ViewBag.NomesFuncionarios as Dictionary<int, string>;
+    var autorizacoes = ViewBag.Autorizacoes as Dictionary<int, string>;
+}
+
+<h1>Ordens de Saída (@Model.Count)</h1>
+<p>
+    <a class="btn btn-danger" href="/OrdemSaida/Create">
+        <i class="bi bi-plus-circle me-1"></i> Nova Ordem de Saída
+    </a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID da Ordem</th>
+            <th>Data da Saída</th>
+            <th>Funcionário Requisitante</th>
+            <th>Autorização (Função -> Local)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.IdOrdSai</td>
+                <td>@o.DataSaida.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @(nomesFuncionarios.GetValueOrDefault(o.FuncId, "???"))
+                </td>
+                <td>
+                    @(autorizacoes.GetValueOrDefault(o.AutorizaId, "???"))
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="/OrdemSaida/Details/@o.IdOrdSai">
+                        <i class="bi bi-list-check me-1"></i> Ver Itens / Adicionar Itens
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
