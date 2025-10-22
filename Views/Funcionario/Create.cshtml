@@ -6,52 +6,25 @@
 <h1 class="mb-4">Adicionar Funcionário</h1>
 
 <form asp-action="Create" method="post" id="form-func">
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+  <div class="mb-3">
+    <label class="form-label" for="Nome">Nome</label>
+    <input class="form-control" id="Nome" name="Nome" />
+  </div>
 
-    <div class="mb-3">
-        <label asp-for="Nome" class="form-label"></label>
-        <input asp-for="Nome" class="form-control" />
-        <span asp-validation-for="Nome" class="text-danger"></span>
-    </div>
+  <div class="mb-3">
+    <label class="form-label" for="CPF">CPF</label>
+    <input class="form-control" id="CPF" name="CPF" />
+  </div>
 
-    <div class="mb-3">
-        <label asp-for="CpfCnpj" class="form-label"></label>
-        <input asp-for="CpfCnpj" class="form-control" />
-        <span asp-validation-for="CpfCnpj" class="text-danger"></span>
-    </div>
+  <div class="mb-3">
+    <label class="form-label" for="DataNascimento">Data de Nascimento</label>
+    <input class="form-control" id="DataNascimento" name="DataNascimento" type="date" />
+  </div>
 
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" type="email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Telefone" class="form-label"></label>
-        <input asp-for="Telefone" class="form-control" />
-        <span asp-validation-for="Telefone" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Cargo" class="form-label"></label>
-        <input asp-for="Cargo" class="form-control" />
-        <span asp-validation-for="Cargo" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Setor" class="form-label"></label>
-        <input asp-for="Setor" class="form-control" />
-        <span asp-validation-for="Setor" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        <i class="bi bi-save me-1"></i> Incluir Funcionário
-    </button>
-    <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">
-        <i class="bi bi-x-circle me-1"></i> Cancelar
-    </a>
+  <button type="submit" class="btn btn-primary">
+    <i class="bi bi-save me-1"></i> Incluir Funcionário
+  </button>
+  <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">
+    <i class="bi bi-x-circle me-1"></i> Cancelar
+  </a>
 </form>
-
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
