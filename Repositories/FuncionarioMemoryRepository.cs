@@ -20,9 +20,13 @@ public class FuncionarioMemoryRepository : IFuncionarioRepository
     {
         var f = lista.SingleOrDefault(e => e.Id == funcionario.Id);
         if (f is null) return;
+
         f.Nome = funcionario.Nome;
-        f.CPF = funcionario.CPF;
-        f.DataNascimento = funcionario.DataNascimento;
+        f.CpfCnpj = funcionario.CpfCnpj;     
+        f.Email = funcionario.Email;       
+        f.Telefone = funcionario.Telefone;   
+        f.Cargo = funcionario.Cargo;       
+        f.Setor = funcionario.Setor;   
     }
 
     public void Delete(int id)

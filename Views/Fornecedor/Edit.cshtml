@@ -1,12 +1,15 @@
-@model EmurbEstoque.Models.Funcionario
-@{
-    ViewData["Title"] = "Adicionar Funcionário";
-    Layout = "~/Views/_Layout.cshtml";
+@model EmurbEstoque.Models.Fornecedor
+@{ 
+    ViewData["Title"] = "Editar Fornecedor"; 
+    Layout = "~/Views/_Layout.cshtml"; 
 }
-<h1 class="mb-4">Adicionar Funcionário</h1>
+<h1>Editar Fornecedor</h1>
 
-<form asp-action="Create" method="post" id="form-func">
+<form asp-action="Edit" method="post" id="form-func">
+    @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    
+    <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
         <label asp-for="Nome" class="form-label"></label>
@@ -33,23 +36,13 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="Cargo" class="form-label"></label>
-        <input asp-for="Cargo" class="form-control" />
-        <span asp-validation-for="Cargo" class="text-danger"></span>
+        <label asp-for="InscricaoEstadual" class="form-label"></label>
+        <input asp-for="InscricaoEstadual" class="form-control" />
+        <span asp-validation-for="InscricaoEstadual" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Setor" class="form-label"></label>
-        <input asp-for="Setor" class="form-control" />
-        <span asp-validation-for="Setor" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        <i class="bi bi-save me-1"></i> Incluir Funcionário
-    </button>
-    <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">
-        <i class="bi bi-x-circle me-1"></i> Cancelar
-    </a>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a class="btn btn-outline-secondary" href="@Url.Action("Index","Fornecedor")">Cancelar</a>
 </form>
 
 @section Scripts {
