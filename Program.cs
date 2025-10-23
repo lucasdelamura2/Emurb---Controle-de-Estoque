@@ -17,13 +17,13 @@ builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Login/Error");
 }
 app.UseStaticFiles();
 
 app.UseRouting();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
