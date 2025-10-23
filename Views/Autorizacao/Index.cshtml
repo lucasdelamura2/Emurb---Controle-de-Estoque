@@ -1,0 +1,42 @@
+@model List<EmurbEstoque.Models.Autorizacao>
+@{
+    ViewData["Title"] = "Autorizações";
+    Layout = "~/Views/_Layout.cshtml";
+    var nomesAutorizados = ViewBag.NomesAutorizados as Dictionary<int, string>;
+    var nomesLocais = ViewBag.NomesLocais as Dictionary<int, string>;
+}
+
+<h1>Autorizações (Função x Local) (@Model.Count)</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Criar Nova Autorização
+    </a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Função Autorizada</th>
+            <th>Local de Destino</th>
+            <th>Ações</th> </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(nomesAutorizados != null && nomesAutorizados.ContainsKey(item.AutorizadoId) ? nomesAutorizados[item.AutorizadoId] : "Função não encontrada")
+                </td>
+                <td>
+                    @(nomesLocais != null && nomesLocais.ContainsKey(item.LocalId) ? nomesLocais[item.LocalId] : "Local não encontrado")
+                </td>
+                <td class="text-nowrap">
+                    <a asp-action="Delete" asp-route-id="@item.IdAutoriza" class="btn btn-sm btn-outline-danger" title="Excluir"
+                       onclick="return confirm('Tem certeza que deseja excluir esta autorização?');">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

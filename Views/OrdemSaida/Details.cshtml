@@ -1,0 +1,100 @@
+@model EmurbEstoque.Models.ViewModels.OrdemSaidaDetailsViewModel
+@{
+    ViewData["Title"] = "Lançar Itens da Saída";
+    Layout = "~/Views/_Layout.cshtml";
+    var nomesProdutos = ViewBag.NomesProdutos as Dictionary<int, string>;
+    var lotesInfo = ViewBag.LotesInfo as Dictionary<int, EmurbEstoque.Models.Lote>; 
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Ordem de Saída N°: @Model.Ordem.IdOrdSai</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-check-circle me-1"></i> Concluir e Voltar
+    </a>
+</div>
+<div class="card p-3 mb-4 bg-light border-0 shadow-sm">
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Data da Saída:</strong> @Model.Ordem.DataSaida.ToString("dd/MM/yyyy")
+        </div>
+        <div class="col-md-4">
+            <strong>Funcionário:</strong> @Model.NomeFuncionario
+        </div>
+         <div class="col-md-4">
+            <strong>Autorização:</strong> @Model.DescricaoAutorizacao
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h3 class="h5">Adicionar Item (Retirada de Lote)</h3>
+<form asp-action="AdicionarItem" method="post" id="form-add-item" class="row g-3 p-3 border rounded mb-4">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <input type="hidden" asp-for="NovoItemForm.OrdSaiId" />
+
+    <div class="col-md-8">
+        <label asp-for="NovoItemForm.LoteId" class="form-label"></label>
+        <select asp-for="NovoItemForm.LoteId" asp-items="Model.ListaLotesDisponiveis" class="form-select">
+            <option value="">-- Selecione o Lote (Produto - Saldo) --</option> </select>
+        <span asp-validation-for="NovoItemForm.LoteId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="NovoItemForm.Qtd" class="form-label"></label>
+        <input asp-for="NovoItemForm.Qtd" type="number" class="form-control" />
+        <span asp-validation-for="NovoItemForm.Qtd" class="text-danger"></span> </div>
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus"></i> Adicionar Item à Saída
+        </button>
+    </div>
+</form>
+
+<h3 class="h5">Itens já Lançados nesta Saída</h3>
+<table class="table table-sm table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Lote de Origem</th>
+            <th>Produto</th>
+            <th>Quantidade Retirada</th>
+            <th>Ações</th> </tr>
+    </thead>
+    <tbody>
+        @if (Model.ItensDaOrdem.Count == 0) 
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">Nenhum item adicionado a esta ordem ainda.</td>
+            </tr>
+        }
+        @foreach (var item in Model.ItensDaOrdem) 
+        {
+            var loteOriginal = (lotesInfo != null && lotesInfo.ContainsKey(item.LoteId)) ? lotesInfo[item.LoteId] : null;
+            var nomeProduto = (loteOriginal != null && nomesProdutos != null && nomesProdutos.ContainsKey(loteOriginal.ProdutoId)) ? nomesProdutos[loteOriginal.ProdutoId] : "Produto Inválido";
+
+            <tr>
+                <td>@item.LoteId</td>
+                <td>@nomeProduto</td>
+                <td>@item.Qtd</td>
+                <td>
+                    <form asp-action="RemoverItem" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="idItemOS" value="@item.IdItemOS" />
+                        <input type="hidden" name="idOrdemSaida" value="@Model.Ordem.IdOrdSai" />
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Remover Item"
+                                onclick="return confirm('Tem certeza que deseja remover este item da ordem?');">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

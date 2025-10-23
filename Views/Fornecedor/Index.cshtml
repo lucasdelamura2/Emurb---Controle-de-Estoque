@@ -1,15 +1,15 @@
-@model List<EmurbEstoque.Models.Funcionario>
+@model List<EmurbEstoque.Models.Fornecedor>
 
 @{
-    ViewData["Title"] = "Funcionários";
-    Layout = "~/Views/_Layout.cshtml"; // Define o layout a ser usado
+    ViewData["Title"] = "Fornecedores";
+    Layout = "~/Views/_Layout.cshtml";
 }
 
-<h1>Funcionários (@Model.Count)</h1>
+<h1>Fornecedores (@Model.Count)</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Adicionar Funcionário
+        <i class="bi bi-plus-circle me-1"></i> Adicionar Fornecedor
     </a>
 </p>
 
@@ -21,8 +21,7 @@
             <th>CPF/CNPJ</th>
             <th>Email</th>
             <th>Telefone</th>
-            <th>Cargo</th>
-            <th>Setor</th>
+            <th>Inscrição Estadual</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -32,11 +31,10 @@
             <tr>
                 <td>@f.Id</td>
                 <td>@f.Nome</td>
-                <td>@f.CPF</td>
+                <td>@f.CpfCnpj</td>
                 <td>@f.Email</td>
                 <td>@f.Telefone</td>
-                <td>@f.Cargo</td>
-                <td>@f.Setor</td>
+                <td>@f.InscricaoEstadual</td>
                 <td class="text-nowrap">
                     <a asp-action="Details" asp-route-id="@f.Id" class="btn btn-sm btn-outline-primary" title="Detalhes">
                         <i class="bi bi-search"></i>
@@ -45,7 +43,7 @@
                         <i class="bi bi-pencil-square"></i>
                     </a>
                     <a asp-action="Delete" asp-route-id="@f.Id" class="btn btn-sm btn-outline-danger" title="Excluir"
-                       onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
+                       onclick="return confirm('Tem certeza que deseja excluir este fornecedor?');">
                         <i class="bi bi-trash"></i>
                     </a>
                 </td>

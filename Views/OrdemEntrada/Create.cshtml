@@ -1,0 +1,33 @@
+@model EmurbEstoque.Models.OrdemEntrada
+@{
+    ViewData["Title"] = "Nova Ordem de Entrada";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1 class="mb-4">Nova Ordem de Entrada (Etapa 1 de 2)</h1>
+<p>Insira os dados do cabeçalho da nota. Os itens (lotes) serão adicionados na próxima etapa.</p>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken() <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="FornId" class="form-label"></label>
+        <select asp-for="FornId" asp-items="ViewBag.Fornecedores" class="form-select">
+            <option value="">-- Selecione um Fornecedor --</option> </select>
+        <span asp-validation-for="FornId" class="text-danger"></span> </div>
+
+    <div class="mb-3">
+        <label asp-for="DataEnt" class="form-label"></label>
+        <input asp-for="DataEnt" class="form-control" type="date" /> <span asp-validation-for="DataEnt" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-arrow-right-circle me-1"></i> Salvar e Adicionar Itens
+    </button>
+    <a asp-action="Index" class="btn btn-outline-secondary"> <i class="bi bi-x-circle me-1"></i> Cancelar
+    </a>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

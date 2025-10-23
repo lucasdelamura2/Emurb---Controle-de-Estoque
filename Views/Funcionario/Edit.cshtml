@@ -13,9 +13,20 @@
     <input class="form-control" id="CPF" name="CPF" value="@Model.CPF" />
   </div>
   <div class="mb-3">
-    <label class="form-label" for="DataNascimento">Data de Nascimento</label>
-    <input class="form-control" id="DataNascimento" name="DataNascimento" type="date"
-           value="@Model.DataNascimento.ToString("yyyy-MM-dd")" />
+    <label class="form-label" for="Email">Email</label>
+    <input class="form-control" id="Email" name="Email" value="@Model.Email" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="Telefone">Telefone</label>
+    <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="Cargo">Cargo</label>
+    <input class="form-control" id="Cargo" name="Cargo" value="@Model.Cargo" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="Setor">Setor</label>
+    <input class="form-control" id="Setor" name="Setor" value="@Model.Setor" />
   </div>
   <button type="submit" class="btn btn-primary">Salvar</button>
   <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">Cancelar</a>

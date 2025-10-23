@@ -1,0 +1,97 @@
+@model EmurbEstoque.Models.ViewModels.OrdemEntradaDetailsViewModel
+@{
+    ViewData["Title"] = "Lançar Itens na Ordem";
+    Layout = "~/Views/_Layout.cshtml";
+    var nomesProdutos = ViewBag.NomesProdutos as Dictionary<int, string>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Ordem de Entrada N°: @Model.Ordem.IdOrdEnt</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-check-circle me-1"></i> Concluir e Voltar
+    </a>
+</div>
+<div class="card p-3 mb-4 bg-light border-0 shadow-sm">
+    <div class="row">
+        <div class="col-md-6">
+            <strong>Fornecedor:</strong> @Model.NomeFornecedor
+        </div>
+        <div class="col-md-6">
+            <strong>Data da Entrada:</strong> @Model.Ordem.DataEnt.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h3 class="h5">Adicionar Item (Lote)</h3>
+<form asp-action="AdicionarLote" method="post" id="form-add-lote" class="row g-3 p-3 border rounded mb-4">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <input type="hidden" asp-for="NovoLoteForm.OrdEntId" />
+
+    <div class="col-md-5">
+        <label asp-for="NovoLoteForm.ProdutoId" class="form-label"></label>
+        <select asp-for="NovoLoteForm.ProdutoId" asp-items="Model.ListaProdutos" class="form-select">
+            <option value="">-- Selecione um Produto --</option>
+        </select>
+        <span asp-validation-for="NovoLoteForm.ProdutoId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="NovoLoteForm.Qtd" class="form-label"></label>
+        <input asp-for="NovoLoteForm.Qtd" type="number" class="form-control" />
+        <span asp-validation-for="NovoLoteForm.Qtd" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="NovoLoteForm.Preco" class="form-label"></label>
+        <input asp-for="NovoLoteForm.Preco" type="number" step="0.01" class="form-control" placeholder="R$ 0,00" />
+        <span asp-validation-for="NovoLoteForm.Preco" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="NovoLoteForm.DataValidade" class="form-label"></label>
+        <input asp-for="NovoLoteForm.DataValidade" type="date" class="form-control" />
+        <span asp-validation-for="NovoLoteForm.DataValidade" class="text-danger"></span> </div>
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus"></i> Adicionar Lote à Ordem
+        </button>
+    </div>
+</form>
+
+<h3 class="h5">Itens já Lançados nesta Ordem</h3>
+<table class="table table-sm table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Preço Custo (Unid.)</th>
+            <th>Data de Validade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ItensDaOrdem.Count == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">Nenhum item adicionado a esta ordem ainda.</td>
+            </tr>
+        }
+        @foreach (var item in Model.ItensDaOrdem)
+        {
+            <tr>
+                <td>
+                    @(nomesProdutos != null && nomesProdutos.ContainsKey(item.ProdutoId) ? nomesProdutos[item.ProdutoId] : "Produto Inválido")
+                </td>
+                <td>@item.Qtd</td>
+                <td>@item.Preco.ToString("C2")</td> <td>@item.DataValidade?.ToString("dd/MM/yyyy")</td> </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

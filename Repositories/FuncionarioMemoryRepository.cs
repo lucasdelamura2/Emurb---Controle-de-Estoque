@@ -22,7 +22,10 @@ public class FuncionarioMemoryRepository : IFuncionarioRepository
         if (f is null) return;
         f.Nome = funcionario.Nome;
         f.CPF = funcionario.CPF;
-        f.DataNascimento = funcionario.DataNascimento;
+        f.Email = funcionario.Email;
+        f.Telefone = funcionario.Telefone;
+        f.Cargo = funcionario.Cargo;
+        f.Setor = funcionario.Setor;
     }
 
     public void Delete(int id)

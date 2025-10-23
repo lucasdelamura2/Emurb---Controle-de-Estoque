@@ -47,7 +47,10 @@ public class FuncionarioController : Controller
 
         f.Nome = dados.Nome;
         f.CPF = dados.CPF;
-        f.DataNascimento = dados.DataNascimento;
+        f.Email = dados.Email;
+        f.Telefone = dados.Telefone;
+        f.Cargo = dados.Cargo;
+        f.Setor = dados.Setor;
 
         return RedirectToAction(nameof(Index));
     }
