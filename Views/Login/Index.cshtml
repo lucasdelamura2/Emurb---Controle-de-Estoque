@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+        <div class="text-center mb-4">
+            <i class="bi bi-person-circle display-4 text-primary"></i>
+            <h3 class="mt-2">Acesso ao Sistema</h3>
+        </div>
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" id="email" name="Email" class="form-control" placeholder="Digite seu e-mail" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" id="senha" name="Senha" class="form-control" placeholder="Digite sua senha" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-auto">Entrar</a>
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Esqueceu sua senha? <a href="#" class="text-decoration-none">Recuperar</a>
+            </small>
+        </div>
+    </div>
+</div>
