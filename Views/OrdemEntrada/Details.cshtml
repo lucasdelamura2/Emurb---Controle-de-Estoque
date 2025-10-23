@@ -24,11 +24,11 @@
 
 <hr />
 
-<h3 class="h5">Adicionar Item (Lote)</h3>
+
 <form asp-action="AdicionarLote" method="post" id="form-add-lote" class="row g-3 p-3 border rounded mb-4">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
+    <h3 class="h5">Adicionar Item (Lote)</h3>   
     <input type="hidden" asp-for="NovoLoteForm.OrdEntId" />
 
     <div class="col-md-5">
@@ -63,7 +63,7 @@
     </div>
 </form>
 
-<h3 class="h5">Itens já Lançados nesta Ordem</h3>
+<h3 class="h5">Itens lançados na Ordem</h3>
 <table class="table table-sm table-striped table-bordered">
     <thead>
         <tr>

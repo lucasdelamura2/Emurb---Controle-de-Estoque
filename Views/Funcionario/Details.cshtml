@@ -1,7 +1,7 @@
 @model EmurbEstoque.Models.Funcionario
 @{ ViewData["Title"] = "Detalhes"; Layout = "~/Views/_Layout.cshtml"; }
 <h1>Detalhes</h1>
-<table class="table">
+<table class="table table-bordered table-striped" style="max-width: 600px;">
   <tr><th>Id</th><td>@Model.Id</td></tr>
   <tr><th>Nome</th><td>@Model.Nome</td></tr>
   <tr><th>CPF</th><td>@Model.CPF</td></tr>
@@ -11,3 +11,4 @@
   <tr><th>Setor</th><td>@Model.Setor</td></tr>
 </table>
 <a class="btn btn-secondary" href="@Url.Action("Index","Funcionario")">Voltar</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
