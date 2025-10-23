@@ -1,0 +1,25 @@
+@model EmurbEstoque.Models.Produto
+@{
+    ViewData["Title"] = "Detalhes do Produto";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1>Detalhes do Produto</h1>
+
+<table class="table table-bordered table-striped" style="max-width: 600px;">
+    <tr>
+        <th>ID</th>
+        <td>@Model.IdProduto</td>
+    </tr>
+    <tr>
+        <th>Nome</th>
+        <td>@Model.Nome</td>
+    </tr>
+    <tr>
+        <th>Descrição</th>
+        <td>@Model.Descricao</td>
+    </tr>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a asp-action="Edit" asp-route-id="@Model.IdProduto" class="btn btn-warning">Editar</a>
