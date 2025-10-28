@@ -11,8 +11,11 @@ builder.Services.AddSingleton<ILoteRepository, LoteMemoryRepository>();
 builder.Services.AddSingleton<ILocalRepository, LocalMemoryRepository>();              
 builder.Services.AddSingleton<IAutorizadoRepository, AutorizadoMemoryRepository>();    
 builder.Services.AddSingleton<IAutorizacaoRepository, AutorizacaoMemoryRepository>();  
-builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();    
-builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();        
+builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();
+builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();
+builder.Services.AddSingleton<IEstoqueRepository, EstoqueMemoryRepository>();
+builder.Services.AddSingleton<IPessoaRepository, PessoaMemoryRepository>();
+builder.Services.AddSingleton<IUsuarioRepository, UsuarioMemoryRepository>();
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())

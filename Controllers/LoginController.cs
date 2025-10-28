@@ -8,5 +8,10 @@ namespace EmurbEstoque.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Login(string Email, string Senha)
+        {
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

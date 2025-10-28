@@ -115,9 +115,19 @@
             </div>
         </div>
 
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <i class="fas fa-warehouse fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Estoque Atual</h5>
+                        <p class="card-text">Consulte o saldo de produtos em estoque.</p>
+                    </div>
+                    <a asp-controller="Estoque" asp-action="Index" class="btn btn-primary mt-auto">Consultar</a>
+                </div>
+            </div>
+        </div>
+
         </div>
 </div>
 
-<footer class="mt-5 py-3 bg-dark text-white text-center">
-    <p>© @DateTime.Now.Year - Sistema de Controle de Estoques</p>
-</footer>

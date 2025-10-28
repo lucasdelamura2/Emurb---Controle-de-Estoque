@@ -8,7 +8,7 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
-<body> 
+<body class="d-flex flex-column min-vh-100"> 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">EMURB</a>
@@ -17,7 +17,7 @@
     </button>
     <div id="topnav" class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
-        <li><a class="nav-link" asp-controller="Home" asp-action="Index">Principal</a></li>
+         <li><a class="nav-link" asp-controller="Home" asp-action="Index">Principal</a></li>
       </ul>
       <div class="d-flex gap-2">
         <button class="btn btn-success" type="submit" form="form-func"><i class="bi bi-save"></i></button>
@@ -26,13 +26,17 @@
     </div>
   </div>
 </nav>
-<main class="container">
+
+<main class="container flex-grow-1">
   @RenderBody()
 </main>
+
+<footer class="mt-auto py-3 bg-dark text-white text-center">
+    <p class="mb-0">© @DateTime.Now.Year - Sistema de Controle de Estoques</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>
