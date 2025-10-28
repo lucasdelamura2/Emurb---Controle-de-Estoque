@@ -6,58 +6,49 @@ namespace EmurbEstoque.Repositories
 {
     public class EstoqueMemoryRepository : IEstoqueRepository
     {
-        private static readonly Dictionary<int, Estoque> _estoqueMem = new Dictionary<int, Estoque>();
-        private static int _nextEstoqueId = 1;
-
-        public int GetQuantidadeByProdutoId(int produtoId)
+        private readonly IProdutoRepository _produtoRepo;
+        private readonly ILoteRepository _loteRepo;   
+        private readonly IItensOSRepository _itensOSRepo;  
+        public EstoqueMemoryRepository(
+            IProdutoRepository produtoRepository,
+            ILoteRepository loteRepository,
+            IItensOSRepository itensOSRepository)
         {
-            return _estoqueMem.TryGetValue(produtoId, out Estoque? estoque) ? estoque.QuantidadeAtual : 0;
+            _produtoRepo = produtoRepository;
+            _loteRepo = loteRepository;
+            _itensOSRepo = itensOSRepository;
         }
 
-        public int UpdateQuantidade(int produtoId, int quantidadeDelta)
+        public List<Estoque> GetEstoqueConsolidado()
         {
-            if (_estoqueMem.TryGetValue(produtoId, out Estoque? estoque))
+            var todosProdutos = _produtoRepo.GetAll();
+            var todasEntradas = _loteRepo.GetAll();
+            var todasSaidas = _itensOSRepo.GetAll();
+
+            var estoqueConsolidado = new List<Estoque>();
+
+            foreach (var produto in todosProdutos)
             {
-                estoque.QuantidadeAtual += quantidadeDelta;
-                if (estoque.QuantidadeAtual < 0)
+                int totalEntrada = todasEntradas
+                    .Where(l => l.ProdutoId == produto.IdProduto)
+                    .Sum(l => l.Qtd);
+                var lotesDoProdutoIds = todasEntradas
+                    .Where(l => l.ProdutoId == produto.IdProduto)
+                    .Select(l => l.IdLote)
+                    .ToList();
+                int totalSaida = todasSaidas
+                    .Where(s => lotesDoProdutoIds.Contains(s.LoteId))
+                    .Sum(s => s.Qtd);
+                estoqueConsolidado.Add(new Estoque
                 {
-                    estoque.QuantidadeAtual = 0;
-                    System.Diagnostics.Debug.WriteLine($"Aviso: Tentativa de deixar estoque negativo para ProdutoId {produtoId}. Ajustado para 0.");
-                }
-                return estoque.QuantidadeAtual;
+                    ProdutoId = produto.IdProduto,
+                    NomeProduto = produto.Nome,
+                    QtdEntrada = totalEntrada,
+                    QtdSaida = totalSaida,
+                    SaldoAtual = totalEntrada - totalSaida
+                });
             }
-            else
-            {
-                if (quantidadeDelta > 0)
-                {
-                     CreateOrUpdateEstoqueEntry(produtoId, quantidadeDelta);
-                     return quantidadeDelta;
-                }
-                 return 0;
-            }
-        }
-
-        public void CreateOrUpdateEstoqueEntry(int produtoId, int quantidadeInicial = 0)
-        {
-             if (_estoqueMem.TryGetValue(produtoId, out Estoque? estoque))
-             {
-                 estoque.QuantidadeAtual = quantidadeInicial >= 0 ? quantidadeInicial : 0;
-             }
-             else
-             {
-                 var novoEstoque = new Estoque
-                 {
-                     IdEstoque = _nextEstoqueId++,
-                     ProdutoId = produtoId,
-                     QuantidadeAtual = quantidadeInicial >= 0 ? quantidadeInicial : 0
-                 };
-                 _estoqueMem.Add(produtoId, novoEstoque);
-             }
-        }
-
-        public List<Estoque> GetAll()
-        {
-            return _estoqueMem.Values.OrderBy(e => e.ProdutoId).ToList();
+            return estoqueConsolidado.OrderBy(p => p.NomeProduto).ToList();
         }
     }
 }

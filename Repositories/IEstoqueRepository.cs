@@ -1,12 +1,10 @@
 using EmurbEstoque.Models;
+using System.Collections.Generic;
 
 namespace EmurbEstoque.Repositories
 {
     public interface IEstoqueRepository
     {
-        int GetQuantidadeByProdutoId(int produtoId);
-        int UpdateQuantidade(int produtoId, int quantidadeDelta);
-        void CreateOrUpdateEstoqueEntry(int produtoId, int quantidadeInicial = 0);
-        List<Estoque> GetAll();
+        List<Estoque> GetEstoqueConsolidado();
     }
 }
