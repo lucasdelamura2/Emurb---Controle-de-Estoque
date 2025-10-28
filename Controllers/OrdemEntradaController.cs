@@ -27,13 +27,13 @@ namespace EmurbEstoque.Controllers
         {
             var ordens = _ordemEntradaRepository.GetAll();
             ViewBag.Fornecedores = _fornecedorRepository.Read()
-                                     .ToDictionary(f => f.Id, f => f.Nome);
+                                     .ToDictionary(f => f.IdPessoa, f => f.Nome);
             return View(ordens);
         }
         public IActionResult Create()
         {
             // Prepara o dropdown de Fornecedores
-            ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "Id", "Nome");
+            ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "IdFornecedor", "Nome");
             return View();
         }
         [HttpPost]
@@ -41,7 +41,7 @@ namespace EmurbEstoque.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "Id", "Nome");
+                ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "IdFornecedor", "Nome");
                 return View(ordem);
             }
             var ordemCriada = _ordemEntradaRepository.Create(ordem);
@@ -52,7 +52,7 @@ namespace EmurbEstoque.Controllers
             var ordem = _ordemEntradaRepository.GetById(id);
             if (ordem == null) return NotFound();
 
-            var fornecedor = _fornecedorRepository.Read(ordem.FornId);
+            var fornecedor = _fornecedorRepository.Read(ordem.IdFornecedor);
             var lotesNaOrdem = _loteRepository.GetByOrdemEntradaId(id);
             var todosProdutos = _produtoRepository.GetAll(); 
 

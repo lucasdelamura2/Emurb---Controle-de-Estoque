@@ -8,7 +8,7 @@
 <form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="IdFornecedor" />
 
     <div class="mb-3">
         <label asp-for="Nome" class="form-label"></label>

@@ -38,7 +38,7 @@ namespace EmurbEstoque.Controllers
         }
         private void PrepararViewBagsCreate()
         {
-            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "Id", "Nome");
+            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "IdPessoa", "Nome");
 
             var listaAutorizacoes = from a in _autorizacaoRepository.GetAll()
                                     join au in _autorizadoRepository.GetAll() on a.AutorizadoId equals au.IdAutorizado
@@ -52,7 +52,7 @@ namespace EmurbEstoque.Controllers
         public IActionResult Index()
         {
             var ordens = _ordemSaidaRepository.GetAll();
-            ViewBag.NomesFuncionarios = _funcionarioRepository.Read().ToDictionary(f => f.Id, f => f.Nome);
+            ViewBag.NomesFuncionarios = _funcionarioRepository.Read().ToDictionary(f => f.IdPessoa, f => f.Nome);
             var autorizacoesDesc = (from a in _autorizacaoRepository.GetAll()
                                     join au in _autorizadoRepository.GetAll() on a.AutorizadoId equals au.IdAutorizado
                                     join l in _localRepository.GetAll() on a.LocalId equals l.IdLocal
@@ -107,7 +107,7 @@ namespace EmurbEstoque.Controllers
                     Id = l.IdLote,
                     Descricao = $"Lote {l.IdLote} ({nomesProdutos.GetValueOrDefault(l.ProdutoId, "???")}) - Saldo: {l.EstoqueAtual}"
                 });
-            var funcionario = _funcionarioRepository.Read(ordem.FuncId);
+            var funcionario = _funcionarioRepository.Read(ordem.IdFuncionario);
             var autorizacao = _autorizacaoRepository.GetById(ordem.AutorizaId);
             var autorizado = autorizacao != null ? _autorizadoRepository.GetById(autorizacao.AutorizadoId) : null;
             var local = autorizacao != null ? _localRepository.GetById(autorizacao.LocalId) : null;

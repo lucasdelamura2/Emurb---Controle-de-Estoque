@@ -29,20 +29,20 @@
         @foreach (var f in Model)
         {
             <tr>
-                <td>@f.Id</td>
+                <td>@f.IdFornecedor</td>
                 <td>@f.Nome</td>
                 <td>@f.CpfCnpj</td>
                 <td>@f.Email</td>
                 <td>@f.Telefone</td>
                 <td>@f.InscricaoEstadual</td>
                 <td class="text-nowrap">
-                    <a asp-action="Details" asp-route-id="@f.Id" class="btn btn-sm btn-outline-primary" title="Detalhes">
+                    <a asp-action="Details" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-primary" title="Detalhes">
                         <i class="bi bi-search"></i>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@f.Id" class="btn btn-sm btn-outline-warning" title="Editar">
+                    <a asp-action="Edit" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-warning" title="Editar">
                         <i class="bi bi-pencil-square"></i>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@f.Id" class="btn btn-sm btn-outline-danger" title="Excluir"
+                    <a asp-action="Delete" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-danger" title="Excluir"
                        onclick="return confirm('Tem certeza que deseja excluir este fornecedor?');">
                         <i class="bi bi-trash"></i>
                     </a>

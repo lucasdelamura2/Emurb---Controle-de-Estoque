@@ -10,7 +10,7 @@ public class FuncionarioController : Controller
 
     public IActionResult Index()
     {
-        return View(_mem.OrderBy(f => f.Id).ToList());
+        return View(_mem.OrderBy(f => f.IdFuncionario).ToList());
     }
 
     [HttpGet]
@@ -19,14 +19,14 @@ public class FuncionarioController : Controller
     [HttpPost]
     public IActionResult Create(Funcionario funcionario)
     {
-        funcionario.Id = _nextId++;
+        funcionario.IdFuncionario = _nextId++;
         _mem.Add(funcionario);
         return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Details(int id)
     {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
+        var f = _mem.FirstOrDefault(x => x.IdFuncionario == id);
         if (f is null) return NotFound();
         return View(f);
     }
@@ -34,7 +34,7 @@ public class FuncionarioController : Controller
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
+        var f = _mem.FirstOrDefault(x => x.IdFuncionario == id);
         if (f is null) return NotFound();
         return View(f);
     }
@@ -42,11 +42,11 @@ public class FuncionarioController : Controller
     [HttpPost]
     public IActionResult Edit(int id, Funcionario dados)
     {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
+        var f = _mem.FirstOrDefault(x => x.IdFuncionario == id);
         if (f is null) return NotFound();
 
         f.Nome = dados.Nome;
-        f.CPF = dados.CPF;
+        f.CpfCnpj = dados.CpfCnpj;
         f.Email = dados.Email;
         f.Telefone = dados.Telefone;
         f.Cargo = dados.Cargo;
@@ -57,7 +57,7 @@ public class FuncionarioController : Controller
 
     public IActionResult Delete(int id)
     {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
+        var f = _mem.FirstOrDefault(x => x.IdFuncionario == id);
         if (f is null) return NotFound();
         _mem.Remove(f);
         return RedirectToAction(nameof(Index));

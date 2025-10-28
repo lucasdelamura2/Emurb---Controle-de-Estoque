@@ -1,37 +1,43 @@
-namespace EmurbEstoque.Repositories;
-
 using EmurbEstoque.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class FornecedorMemoryRepository : IFornecedorRepository
+namespace EmurbEstoque.Repositories
 {
-    private readonly List<Fornecedor> lista = new();
-
-    public void Create(Fornecedor fornecedor)
+    public class FornecedorMemoryRepository : IFornecedorRepository
     {
-        fornecedor.Id = Math.Abs((int)DateTimeOffset.Now.ToUnixTimeMilliseconds());
-        lista.Add(fornecedor);
-    }
+        public static readonly List<Fornecedor> _mem = new();
+        private static int _nextId = 1;
+        public void Create(Fornecedor fornecedor)
+        {
+            if (fornecedor == null) throw new ArgumentNullException(nameof(fornecedor));
+            fornecedor.IdPessoa = _nextId++;
+            _mem.Add(fornecedor);
+        }
+        public void Delete(int id)
+        {
+            var f = Read(id);
+            if (f != null) _mem.Remove(f);
+        }
+        public List<Fornecedor> Read()
+        {
+            return _mem.OrderBy(f => f.Nome).ToList();
+        }
+        public Fornecedor? Read(int id)
+        {
+            return _mem.FirstOrDefault(x => x.IdPessoa == id);
+        }
+        public void Update(Fornecedor dados)
+        {
+            var f = Read(dados.IdPessoa);
+            if (f == null) return;
 
-    public List<Fornecedor> Read() => lista;
-
-    public Fornecedor? Read(int id) => lista.SingleOrDefault(e => e.Id == id);
-
-    public void Update(Fornecedor fornecedor)
-    {
-        var f = lista.SingleOrDefault(e => e.Id == fornecedor.Id);
-        if (f is null) return;
-
-        f.Nome = fornecedor.Nome;
-        f.CpfCnpj = fornecedor.CpfCnpj;     
-        f.Email = fornecedor.Email;       
-        f.Telefone = fornecedor.Telefone;   
-        f.InscricaoEstadual = fornecedor.InscricaoEstadual;         
-    }
-
-    public void Delete(int id)
-    {
-        var f = lista.SingleOrDefault(e => e.Id == id);
-        if (f is null) return;
-        lista.Remove(f);
+            f.Nome = dados.Nome;
+            f.CpfCnpj = dados.CpfCnpj;
+            f.Email = dados.Email;
+            f.Telefone = dados.Telefone;
+            f.InscricaoEstadual = dados.InscricaoEstadual;
+        }
     }
 }

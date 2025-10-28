@@ -1,11 +1,7 @@
 namespace EmurbEstoque.Models;
 
-public class Fornecedor
+public class Fornecedor : Pessoa
 {
-    public int Id { get; set; }
-    public string Nome { get; set; } = "";
-    public string CpfCnpj { get; set; } = "";
-    public string Email { get; set; } = "";
-    public string Telefone { get; set; } = "";
+    public int IdFornecedor { get { return IdPessoa; } set { IdPessoa = value; } }
     public string InscricaoEstadual { get; set; } = "";
 }
