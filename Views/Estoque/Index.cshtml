@@ -26,7 +26,6 @@
 
         @foreach (var item in Model)
         {
-            // Opcional: Adiciona cor ao saldo
             var saldoClass = item.SaldoAtual > 0 ? "text-success" : "text-danger";
             if (item.SaldoAtual == 0) { saldoClass = "text-muted"; }
 
