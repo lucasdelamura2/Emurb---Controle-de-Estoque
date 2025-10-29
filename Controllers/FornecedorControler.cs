@@ -49,7 +49,7 @@ namespace EstoqueWeb.Controllers
             {
                 return View(dados);
             }
-            dados.Id = id; // Garante o ID correto vindo da URL
+            dados.IdFornecedor = id;
             _repository.Update(dados);
             return RedirectToAction(nameof(Index));
         }

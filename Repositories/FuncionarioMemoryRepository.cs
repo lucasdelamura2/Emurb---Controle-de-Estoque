@@ -1,37 +1,44 @@
-namespace EmurbEstoque.Repositories;
-
 using EmurbEstoque.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class FuncionarioMemoryRepository : IFuncionarioRepository
+namespace EmurbEstoque.Repositories
 {
-    private readonly List<Funcionario> lista = new();
-
-    public void Create(Funcionario funcionario)
+    public class FuncionarioMemoryRepository : IFuncionarioRepository
     {
-        funcionario.Id = Math.Abs((int)DateTimeOffset.Now.ToUnixTimeMilliseconds());
-        lista.Add(funcionario);
-    }
+        public static readonly List<Funcionario> _mem = new();
+        private static int _nextId = 1;
+        public void Create(Funcionario funcionario)
+        {
+            if (funcionario == null) throw new ArgumentNullException(nameof(funcionario));
 
-    public List<Funcionario> Read() => lista;
-
-    public Funcionario? Read(int id) => lista.SingleOrDefault(e => e.Id == id);
-
-    public void Update(Funcionario funcionario)
-    {
-        var f = lista.SingleOrDefault(e => e.Id == funcionario.Id);
-        if (f is null) return;
-        f.Nome = funcionario.Nome;
-        f.CPF = funcionario.CPF;
-        f.Email = funcionario.Email;
-        f.Telefone = funcionario.Telefone;
-        f.Cargo = funcionario.Cargo;
-        f.Setor = funcionario.Setor;
-    }
-
-    public void Delete(int id)
-    {
-        var f = lista.SingleOrDefault(e => e.Id == id);
-        if (f is null) return;
-        lista.Remove(f);
+            funcionario.IdPessoa = _nextId++; 
+            _mem.Add(funcionario);
+        }
+        public void Delete(int id)
+        {
+            var f = Read(id);
+            if (f != null) _mem.Remove(f);
+        }
+        public List<Funcionario> Read()
+        {
+            return _mem.OrderBy(f => f.Nome).ToList();
+        }
+        public Funcionario? Read(int id)
+        {
+            return _mem.FirstOrDefault(x => x.IdPessoa == id);
+        }
+        public void Update(Funcionario dados)
+        {
+            var f = Read(dados.IdPessoa); 
+            if (f == null) return;
+            f.Nome = dados.Nome;
+            f.CpfCnpj = dados.CpfCnpj;
+            f.Email = dados.Email;
+            f.Telefone = dados.Telefone;
+            f.Cargo = dados.Cargo;
+            f.Setor = dados.Setor;
+        }
     }
 }

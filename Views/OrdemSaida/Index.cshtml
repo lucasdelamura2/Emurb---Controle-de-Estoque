@@ -28,7 +28,7 @@
             <tr>
                 <td>@o.IdOrdSai</td>
                 <td>@o.DataSaida.ToString("dd/MM/yyyy")</td> <td>
-                    @(nomesFuncionarios != null && nomesFuncionarios.ContainsKey(o.FuncId) ? nomesFuncionarios[o.FuncId] : "Funcionário não encontrado")
+                    @(nomesFuncionarios != null && nomesFuncionarios.ContainsKey(o.IdFuncionario) ? nomesFuncionarios[o.IdFuncionario] : "Funcionário não encontrado")
                 </td>
                 <td>
                     @(autorizacoes != null && autorizacoes.ContainsKey(o.AutorizaId) ? autorizacoes[o.AutorizaId] : "Autorização não encontrada")

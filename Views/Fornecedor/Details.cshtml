@@ -8,8 +8,8 @@
 
 <table class="table table-bordered table-striped" style="max-width: 600px;">
     <tr>
-        <th>@Html.DisplayNameFor(m => m.Id)</th>
-        <td>@Model.Id</td>
+        <th>@Html.DisplayNameFor(m => m.IdFornecedor)</th>
+        <td>@Model.IdFornecedor</td>
     </tr>
     <tr>
         <th>@Html.DisplayNameFor(m => m.Nome)</th>
@@ -34,4 +34,4 @@
 </table>
 
 <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+<a asp-action="Edit" asp-route-id="@Model.IdFornecedor" class="btn btn-warning">Editar</a>

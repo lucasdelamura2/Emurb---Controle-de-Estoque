@@ -1,33 +1,54 @@
 @model EmurbEstoque.Models.Funcionario
-@{ ViewData["Title"] = "Editar"; Layout = "~/Views/_Layout.cshtml"; }
+@{
+    ViewData["Title"] = "Editar Funcionário";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
 <h1>Editar Funcionário</h1>
 
 <form asp-action="Edit" method="post">
-  <input type="hidden" name="Id" value="@Model.Id" />
-  <div class="mb-3">
-    <label class="form-label" for="Nome">Nome</label>
-    <input class="form-control" id="Nome" name="Nome" value="@Model.Nome" />
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="CPF">CPF</label>
-    <input class="form-control" id="CPF" name="CPF" value="@Model.CPF" />
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="Email">Email</label>
-    <input class="form-control" id="Email" name="Email" value="@Model.Email" />
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="Telefone">Telefone</label>
-    <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" />
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="Cargo">Cargo</label>
-    <input class="form-control" id="Cargo" name="Cargo" value="@Model.Cargo" />
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="Setor">Setor</label>
-    <input class="form-control" id="Setor" name="Setor" value="@Model.Setor" />
-  </div>
-  <button type="submit" class="btn btn-primary">Salvar</button>
-  <a class="btn btn-outline-secondary" href="@Url.Action("Index","Funcionario")">Cancelar</a>
+    @Html.AntiForgeryToken() <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div> <input type="hidden" asp-for="IdPessoa" />
+
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span> </div>
+
+    <div class="mb-3">
+        <label asp-for="CpfCnpj" class="form-label"></label> <input asp-for="CpfCnpj" class="form-control" /> <span asp-validation-for="CpfCnpj" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" type="email" /> <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Telefone" class="form-label"></label>
+        <input asp-for="Telefone" class="form-control" />
+        <span asp-validation-for="Telefone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Cargo" class="form-label"></label>
+        <input asp-for="Cargo" class="form-control" />
+        <span asp-validation-for="Cargo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Setor" class="form-label"></label>
+        <input asp-for="Setor" class="form-control" />
+        <span asp-validation-for="Setor" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save me-1"></i> Salvar Alterações
+    </button>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-x-circle me-1"></i> Cancelar
+    </a>
 </form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

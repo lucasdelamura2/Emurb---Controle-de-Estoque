@@ -1,12 +1,14 @@
-namespace EmurbEstoque.Repositories;
-
 using EmurbEstoque.Models;
+using System.Collections.Generic;
 
-public interface IFuncionarioRepository
+namespace EmurbEstoque.Repositories
 {
-    void Create(Funcionario funcionario);
-    List<Funcionario> Read();
-    Funcionario? Read(int id);
-    void Update(Funcionario funcionario);
-    void Delete(int id);
+    public interface IFuncionarioRepository
+    {
+        void Create(Funcionario funcionario);
+        List<Funcionario> Read(); 
+        Funcionario? Read(int id);        
+        void Update(Funcionario funcionario);
+        void Delete(int id);
+    }
 }

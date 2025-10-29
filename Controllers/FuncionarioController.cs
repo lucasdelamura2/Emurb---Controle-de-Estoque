@@ -1,65 +1,54 @@
 using EmurbEstoque.Models;
+using EmurbEstoque.Repositories; 
 using Microsoft.AspNetCore.Mvc;
 
-namespace EmurbEstoque.Controllers;
-
-public class FuncionarioController : Controller
+namespace EmurbEstoque.Controllers
 {
-    private static readonly List<Funcionario> _mem = new();
-    private static int _nextId = 1;
-
-    public IActionResult Index()
+    public class FuncionarioController : Controller
     {
-        return View(_mem.OrderBy(f => f.Id).ToList());
-    }
+        private readonly IFuncionarioRepository _repository;
+        public FuncionarioController(IFuncionarioRepository repository)
+        {
+            _repository = repository;
+        }
+        public IActionResult Index()
+        {
+            return View(_repository.Read().OrderBy(f => f.IdFuncionario).ToList());
+        }
+        [HttpGet]
+        public IActionResult Create() => View();
 
-    [HttpGet]
-    public IActionResult Create() => View();
+        [HttpPost]
+        public IActionResult Create(Funcionario funcionario)
+        {
+            _repository.Create(funcionario);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Details(int id)
+        {
+            var f = _repository.Read(id);
+            if (f is null) return NotFound();
+            return View(f);
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var f = _repository.Read(id);
+            if (f is null) return NotFound();
+            return View(f);
+        }
+        [HttpPost]
+        public IActionResult Edit(int id, Funcionario dados)
+        {
+            dados.IdFuncionario = id;          
+            _repository.Update(dados);
+            return RedirectToAction(nameof(Index));
+        }
 
-    [HttpPost]
-    public IActionResult Create(Funcionario funcionario)
-    {
-        funcionario.Id = _nextId++;
-        _mem.Add(funcionario);
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Details(int id)
-    {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
-        if (f is null) return NotFound();
-        return View(f);
-    }
-
-    [HttpGet]
-    public IActionResult Edit(int id)
-    {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
-        if (f is null) return NotFound();
-        return View(f);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(int id, Funcionario dados)
-    {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
-        if (f is null) return NotFound();
-
-        f.Nome = dados.Nome;
-        f.CPF = dados.CPF;
-        f.Email = dados.Email;
-        f.Telefone = dados.Telefone;
-        f.Cargo = dados.Cargo;
-        f.Setor = dados.Setor;
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Delete(int id)
-    {
-        var f = _mem.FirstOrDefault(x => x.Id == id);
-        if (f is null) return NotFound();
-        _mem.Remove(f);
-        return RedirectToAction(nameof(Index));
+        public IActionResult Delete(int id)
+        {
+            _repository.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

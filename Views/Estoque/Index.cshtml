@@ -1,0 +1,41 @@
+@model List<EmurbEstoque.Models.Estoque>
+@{
+    ViewData["Title"] = "Saldo de Estoque";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1 class="mb-4">Saldo de Estoque</h1>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID Produto</th>
+            <th>Produto</th>
+            <th>Total Entradas</th>
+            <th>Total Saídas</th>
+            <th>Saldo Atual</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">Nenhum produto encontrado.</td>
+            </tr>
+        }
+
+        @foreach (var item in Model)
+        {
+            var saldoClass = item.SaldoAtual > 0 ? "text-success" : "text-danger";
+            if (item.SaldoAtual == 0) { saldoClass = "text-muted"; }
+
+            <tr>
+                <td>@item.ProdutoId</td>
+                <td>@item.NomeProduto</td>
+                <td>@item.QtdEntrada</td>
+                <td>@item.QtdSaida</td>
+                <td class="fw-bold @saldoClass">@item.SaldoAtual</td>
+            </tr>
+        }
+    </tbody>
+</table>
