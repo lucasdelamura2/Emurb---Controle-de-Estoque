@@ -18,7 +18,7 @@
             <th>ID da Ordem</th>
             <th>Fornecedor</th>
             <th>Data da Entrada</th>
-            <th>Ações</th>
+            <th>Status</th> <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +27,32 @@
             <tr>
                 <td>@o.IdOrdEnt</td>
                 <td>
-                    @(fornecedores != null && fornecedores.ContainsKey(o.IdFornecedor) ? fornecedores[o.IdFornecedor] : "Não encontrado")
+                    @(fornecedores != null && fornecedores.ContainsKey(o.IdFornecedor) 
+                        ? fornecedores[o.IdFornecedor] : "Não encontrado")
                 </td>
-                <td>@o.DataEnt.ToString("dd/MM/yyyy")</td> <td>
+                <td>@o.DataEnt.ToString("dd/MM/yyyy")</td>
+                
+                <td>
+                    @if(o.Status == "Aberta")
+                    {
+                        <span class="badge bg-warning text-dark">@o.Status</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@o.Status</span>
+                    }
+                </td>
+                
+                <td>
                     <a asp-action="Details" asp-route-id="@o.IdOrdEnt" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-list-check me-1"></i> Ver Lotes / Adicionar Itens
+                        @if(o.Status == "Aberta")
+                        {
+                            <i class="bi bi-pencil-square me-1"></i> @:Editar Itens
+                        }
+                        else
+                        {
+                            <i class="bi bi-search me-1"></i> @:Visualizar
+                        }
                     </a>
                 </td>
             </tr>
