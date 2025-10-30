@@ -12,15 +12,16 @@ namespace EmurbEstoque.Repositories
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = @"
-                INSERT INTO OrdemEntrada (fornId, dataEnt) 
-                VALUES (@fornId, @dataEnt);
+                INSERT INTO OrdemEntrada (fornId, dataEnt, status) 
+                VALUES (@fornId, @dataEnt, @status);
                 SELECT SCOPE_IDENTITY(); 
             ";
             
             cmd.Parameters.AddWithValue("@fornId", ordem.IdFornecedor);
             cmd.Parameters.AddWithValue("@dataEnt", ordem.DataEnt);
-            var newId = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.Parameters.AddWithValue("@status", ordem.Status); 
 
+            var newId = Convert.ToInt32(cmd.ExecuteScalar());
             ordem.IdOrdEnt = newId;
             return ordem;
         }
@@ -39,7 +40,8 @@ namespace EmurbEstoque.Repositories
                 {
                     IdOrdEnt = (int)reader["idOrdEnt"],
                     IdFornecedor = (int)reader["fornId"],
-                    DataEnt = (DateTime)reader["dataEnt"]
+                    DataEnt = (DateTime)reader["dataEnt"],
+                    Status = (string)reader["status"] 
                 });
             }
             return lista;
@@ -59,10 +61,19 @@ namespace EmurbEstoque.Repositories
                 {
                     IdOrdEnt = (int)reader["idOrdEnt"],
                     IdFornecedor = (int)reader["fornId"],
-                    DataEnt = (DateTime)reader["dataEnt"]
+                    DataEnt = (DateTime)reader["dataEnt"],
+                    Status = (string)reader["status"] 
                 };
             }
             return null;
+        }
+        public void Concluir(int id)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "UPDATE OrdemEntrada SET status = 'Concluída' WHERE idOrdEnt = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
         }
     }
 }

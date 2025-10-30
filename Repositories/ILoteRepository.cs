@@ -8,5 +8,7 @@ namespace EmurbEstoque.Repositories
         List<Lote> GetByOrdemEntradaId(int ordemEntradaId);
         List<Lote> GetAll();
         Lote? GetById(int id);
+        void Delete(int id);
+        void Update(Lote lote);
     }
 }

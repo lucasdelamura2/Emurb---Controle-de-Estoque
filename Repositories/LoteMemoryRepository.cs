@@ -28,5 +28,25 @@ namespace EmurbEstoque.Repositories
         {
             return _lotesMem.Where(l => l.OrdEntId == ordemEntradaId).ToList();
         }
+
+        public void Delete(int id)
+        {
+            var lote = GetById(id);
+            if (lote != null)
+            {
+                _lotesMem.Remove(lote);
+            }
+        }
+        public void Update(Lote lote)
+        {
+            var loteExistente = GetById(lote.IdLote);
+            if (loteExistente != null)
+            {
+                loteExistente.ProdutoId = lote.ProdutoId;
+                loteExistente.Qtd = lote.Qtd;
+                loteExistente.Preco = lote.Preco;
+                loteExistente.DataValidade = lote.DataValidade;
+            }
+        }
     }
 }

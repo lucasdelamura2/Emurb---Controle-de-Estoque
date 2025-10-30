@@ -101,12 +101,51 @@ namespace EmurbEstoque.Repositories
                     OrdEntId = (int)reader["OrdEntId"],
                     Qtd = (int)reader["qtd"],
                     Preco = (decimal)reader["preco"],
-                    DataValidade = reader["dataValidade"] == DBNull.Value ? 
-                                    null : 
+                    DataValidade = reader["dataValidade"] == DBNull.Value ?
+                                    null :
                                     (DateTime?)reader["dataValidade"]
                 };
             }
             return null;
+        }
+        public void Delete(int id)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "DELETE FROM Lote WHERE idLote = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+        }
+        public void Update(Lote lote)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = @"
+                UPDATE Lote 
+                SET produtoId = @prodId, 
+                    OrdEntId = @ordEntId, 
+                    qtd = @qtd, 
+                    preco = @preco, 
+                    dataValidade = @dataVal
+                WHERE idLote = @idLote
+            ";
+
+            cmd.Parameters.AddWithValue("@idLote", lote.IdLote);
+            cmd.Parameters.AddWithValue("@prodId", lote.ProdutoId);
+            cmd.Parameters.AddWithValue("@ordEntId", lote.OrdEntId);
+            cmd.Parameters.AddWithValue("@qtd", lote.Qtd);
+            cmd.Parameters.AddWithValue("@preco", lote.Preco);
+
+            if (lote.DataValidade.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@dataVal", lote.DataValidade.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue("@dataVal", DBNull.Value);
+            }
+
+            cmd.ExecuteNonQuery();
         }
     }
 }

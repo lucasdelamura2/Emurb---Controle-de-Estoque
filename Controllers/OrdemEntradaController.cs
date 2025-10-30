@@ -1,6 +1,6 @@
 using EmurbEstoque.Models;
 using EmurbEstoque.Models.ViewModels;
-using EmurbEstoque.Repositories; // Importante
+using EmurbEstoque.Repositories; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -26,14 +26,14 @@ namespace EmurbEstoque.Controllers
         public IActionResult Index()
         {
             var ordens = _ordemEntradaRepository.GetAll();
+            
             ViewBag.Fornecedores = _fornecedorRepository.Read()
-                                     .ToDictionary(f => f.IdPessoa, f => f.Nome);
+                                         .ToDictionary(f => f.IdFornecedor, f => f.Nome); 
             return View(ordens);
         }
         public IActionResult Create()
         {
-            // Prepara o dropdown de Fornecedores
-            ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "IdFornecedor", "Nome");
+            ViewBag.Fornecedores = new SelectList(_fornecedorRepository.Read(), "IdFornecedor", "Nome"); 
             return View();
         }
         [HttpPost]
@@ -52,7 +52,7 @@ namespace EmurbEstoque.Controllers
             var ordem = _ordemEntradaRepository.GetById(id);
             if (ordem == null) return NotFound();
 
-            var fornecedor = _fornecedorRepository.Read(ordem.IdFornecedor);
+            var fornecedor = _fornecedorRepository.Read(ordem.IdFornecedor); 
             var lotesNaOrdem = _loteRepository.GetByOrdemEntradaId(id);
             var todosProdutos = _produtoRepository.GetAll(); 
 
@@ -68,18 +68,79 @@ namespace EmurbEstoque.Controllers
 
             return View(viewModel);
         }
+
         [HttpPost]
         public IActionResult AdicionarLote(Lote NovoLoteForm) 
         {
+            var ordem = _ordemEntradaRepository.GetById(NovoLoteForm.OrdEntId);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
+            }
+
             if (ModelState.IsValid)
             {
                 _loteRepository.Create(NovoLoteForm);
             }
             else
             {
-                 return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
+                return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
             }
+            
             return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
+        }
+        
+        [HttpPost]
+        public IActionResult RemoverLote(int idLote, int idOrdemEntrada)
+        {
+            var ordem = _ordemEntradaRepository.GetById(idOrdemEntrada);
+             if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = idOrdemEntrada });
+            }
+
+            _loteRepository.Delete(idLote);
+            return RedirectToAction(nameof(Details), new { id = idOrdemEntrada });
+        }
+
+        [HttpPost]
+        public IActionResult Concluir(int id)
+        {
+            _ordemEntradaRepository.Concluir(id);
+            return RedirectToAction(nameof(Index)); 
+        }
+
+        [HttpGet]
+        public IActionResult EditarLote(int id) 
+        {
+            var lote = _loteRepository.GetById(id);
+            if (lote == null)
+            {
+                return NotFound();
+            }
+            var ordem = _ordemEntradaRepository.GetById(lote.OrdEntId);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = lote.OrdEntId });
+            }
+            ViewBag.ListaProdutos = new SelectList(_produtoRepository.GetAll(), "IdProduto", "Nome");
+            return View("EditarLote", lote); 
+        }
+
+        [HttpPost]
+        public IActionResult EditarLote(int id, Lote lote)
+        {
+            lote.IdLote = id; 
+            
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ListaProdutos = new SelectList(_produtoRepository.GetAll(), "IdProduto", "Nome");
+                return View("EditarLote", lote);
+            }
+
+            _loteRepository.Update(lote);
+            
+            return RedirectToAction(nameof(Details), new { id = lote.OrdEntId });
         }
     }
 }
