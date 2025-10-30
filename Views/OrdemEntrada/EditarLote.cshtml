@@ -1,0 +1,57 @@
+@model EmurbEstoque.Models.Lote
+@{
+    ViewData["Title"] = "Editar Lote";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1 class="mb-4">Editar Lote da Ordem N° @Model.OrdEntId</h1>
+
+<form asp-action="EditarLote" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <input type="hidden" asp-for="IdLote" />
+    <input type="hidden" asp-for="OrdEntId" />
+
+    <div class="row g-3">
+        <div class="col-md-12">
+            <label asp-for="ProdutoId" class="form-label"></label>
+            <select asp-for="ProdutoId" asp-items="ViewBag.ListaProdutos" class="form-select">
+                <option value="">-- Selecione um Produto --</option>
+            </select>
+            <span asp-validation-for="ProdutoId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Qtd" class="form-label"></label>
+            <input asp-for="Qtd" type="number" class="form-control" />
+            <span asp-validation-for="Qtd" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Preco" class="form-label"></label>
+            <input asp-for="Preco" type="number" step="0.01" class="form-control" placeholder="R$ 0,00" />
+            <span asp-validation-for="Preco" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="DataValidade" class="form-label"></label>
+            <input asp-for="DataValidade" type="date" class="form-control" />
+            <span asp-validation-for="DataValidade" class="text-danger"></span> 
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i> Salvar Alterações
+        </button>
+        <a asp-controller="OrdemEntrada" asp-action="Details" asp-route-id="@Model.OrdEntId" 
+           class="btn btn-outline-secondary">
+            <i class="bi bi-x-circle me-1"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

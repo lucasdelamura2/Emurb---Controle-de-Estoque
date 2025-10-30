@@ -8,12 +8,15 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IFuncionarioRepository>(_ => new FuncionarioDatabaseRepository(connectionString));
 builder.Services.AddTransient<IProdutoRepository>(_ => new ProdutoDatabaseRepository(connectionString));
+builder.Services.AddTransient<IFornecedorRepository>(_ => new FornecedorDatabaseRepository(connectionString));
+builder.Services.AddTransient<IOrdemEntradaRepository>(_ => new OrdemEntradaDatabaseRepository(connectionString));
+builder.Services.AddTransient<ILoteRepository>(_ => new LoteDatabaseRepository(connectionString));
 
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();
 // builder.Services.AddSingleton<IProdutoRepository, ProdutoMemoryRepository>(); 
-builder.Services.AddSingleton<IFornecedorRepository, FornecedorMemoryRepository>();
-builder.Services.AddSingleton<IOrdemEntradaRepository, OrdemEntradaMemoryRepository>();
-builder.Services.AddSingleton<ILoteRepository, LoteMemoryRepository>();
+// builder.Services.AddSingleton<IFornecedorRepository, FornecedorMemoryRepository>();
+// builder.Services.AddSingleton<IOrdemEntradaRepository, OrdemEntradaMemoryRepository>();
+// builder.Services.AddSingleton<ILoteRepository, LoteMemoryRepository>();
 builder.Services.AddSingleton<ILocalRepository, LocalMemoryRepository>();              
 builder.Services.AddSingleton<IAutorizadoRepository, AutorizadoMemoryRepository>();    
 builder.Services.AddSingleton<IAutorizacaoRepository, AutorizacaoMemoryRepository>();  
