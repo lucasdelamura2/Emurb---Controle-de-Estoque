@@ -11,13 +11,14 @@ builder.Services.AddTransient<IProdutoRepository>(_ => new ProdutoDatabaseReposi
 builder.Services.AddTransient<IFornecedorRepository>(_ => new FornecedorDatabaseRepository(connectionString));
 builder.Services.AddTransient<IOrdemEntradaRepository>(_ => new OrdemEntradaDatabaseRepository(connectionString));
 builder.Services.AddTransient<ILoteRepository>(_ => new LoteDatabaseRepository(connectionString));
+builder.Services.AddTransient<ILocalRepository>(_ => new LocalDatabaseRepository(connectionString));
 
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();
 // builder.Services.AddSingleton<IProdutoRepository, ProdutoMemoryRepository>(); 
 // builder.Services.AddSingleton<IFornecedorRepository, FornecedorMemoryRepository>();
 // builder.Services.AddSingleton<IOrdemEntradaRepository, OrdemEntradaMemoryRepository>();
 // builder.Services.AddSingleton<ILoteRepository, LoteMemoryRepository>();
-builder.Services.AddSingleton<ILocalRepository, LocalMemoryRepository>();              
+//builder.Services.AddSingleton<ILocalRepository, LocalMemoryRepository>();              
 builder.Services.AddSingleton<IAutorizadoRepository, AutorizadoMemoryRepository>();    
 builder.Services.AddSingleton<IAutorizacaoRepository, AutorizacaoMemoryRepository>();  
 builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();    
