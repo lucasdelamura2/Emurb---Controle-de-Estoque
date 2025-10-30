@@ -72,7 +72,6 @@ namespace EmurbEstoque.Repositories
             {
                  return new Funcionario
                 {
-                    // Dados de Pessoas
                     IdFuncionario = (int)reader["idPessoa"],
                     Nome = (string)reader["nome"],
                     CpfCnpj = (string)reader["cpf_cnpj"],
