@@ -88,16 +88,5 @@ namespace EmurbEstoque.Repositories
 
             cmd.ExecuteNonQuery();
         }
-
-        public bool Exists(string funcao)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = "SELECT COUNT(*) FROM Autorizados WHERE funcao = @funcao;";
-            cmd.Parameters.AddWithValue("@funcao", funcao);
-
-            int count = (int)cmd.ExecuteScalar();
-            return count > 0;
-        }
     }
 }
