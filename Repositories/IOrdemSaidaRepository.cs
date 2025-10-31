@@ -8,5 +8,6 @@ namespace EmurbEstoque.Repositories
         OrdemSaida Create(OrdemSaida ordemSaida);
         List<OrdemSaida> GetAll();
         OrdemSaida? GetById(int id);
+        void Concluir(int id);
     }
 }

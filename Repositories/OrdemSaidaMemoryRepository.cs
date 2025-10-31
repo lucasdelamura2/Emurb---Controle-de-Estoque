@@ -15,6 +15,7 @@ namespace EmurbEstoque.Repositories
             if (ordemSaida == null) throw new ArgumentNullException(nameof(ordemSaida));
 
             ordemSaida.IdOrdSai = _nextOrdemId++;
+            ordemSaida.Status = "Aberta"; 
             _ordensSaidaMem.Add(ordemSaida);
             return ordemSaida; 
         }
@@ -27,6 +28,16 @@ namespace EmurbEstoque.Repositories
         public OrdemSaida? GetById(int id)
         {
             return _ordensSaidaMem.FirstOrDefault(o => o.IdOrdSai == id);
+        }
+        
+        // ADICIONE ESTE MÉTODO:
+        public void Concluir(int id)
+        {
+            var ordem = _ordensSaidaMem.FirstOrDefault(o => o.IdOrdSai == id);
+            if (ordem != null)
+            {
+                ordem.Status = "Concluída";
+            }
         }
     }
 }
