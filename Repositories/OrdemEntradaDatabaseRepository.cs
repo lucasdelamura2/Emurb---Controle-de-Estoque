@@ -1,5 +1,7 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic; 
+using System; 
 
 namespace EmurbEstoque.Repositories
 {
@@ -33,17 +35,19 @@ namespace EmurbEstoque.Repositories
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM OrdemEntrada ORDER BY dataEnt DESC";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new OrdemEntrada
+                while (reader.Read())
                 {
-                    IdOrdEnt = (int)reader["idOrdEnt"],
-                    IdFornecedor = (int)reader["fornId"],
-                    DataEnt = (DateTime)reader["dataEnt"],
-                    Status = (string)reader["status"] 
-                });
-            }
+                    lista.Add(new OrdemEntrada
+                    {
+                        IdOrdEnt = (int)reader["idOrdEnt"],
+                        IdFornecedor = (int)reader["fornId"],
+                        DataEnt = (DateTime)reader["dataEnt"],
+                        Status = (string)reader["status"] 
+                    });
+                }
+            } 
             return lista;
         }
 
@@ -54,17 +58,19 @@ namespace EmurbEstoque.Repositories
             cmd.CommandText = "SELECT * FROM OrdemEntrada WHERE idOrdEnt = @id";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                return new OrdemEntrada
+                if (reader.Read())
                 {
-                    IdOrdEnt = (int)reader["idOrdEnt"],
-                    IdFornecedor = (int)reader["fornId"],
-                    DataEnt = (DateTime)reader["dataEnt"],
-                    Status = (string)reader["status"] 
-                };
-            }
+                    return new OrdemEntrada
+                    {
+                        IdOrdEnt = (int)reader["idOrdEnt"],
+                        IdFornecedor = (int)reader["fornId"],
+                        DataEnt = (DateTime)reader["dataEnt"],
+                        Status = (string)reader["status"] 
+                    };
+                }
+            } 
             return null;
         }
         public void Concluir(int id)

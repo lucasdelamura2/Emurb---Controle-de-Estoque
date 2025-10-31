@@ -1,5 +1,6 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic; 
 
 namespace EmurbEstoque.Repositories
 {
@@ -31,7 +32,7 @@ namespace EmurbEstoque.Repositories
         }
         public List<Funcionario> Read()
         {
-            var lista = new List<Funcionario>();
+            var lista = new List<Funcionario>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = @"
@@ -39,19 +40,22 @@ namespace EmurbEstoque.Repositories
                 JOIN Funcionarios f ON p.idPessoa = f.idFuncionario
                 ORDER BY p.nome
             ";
-            SqlDataReader reader = cmd.ExecuteReader();
-            while(reader.Read())
+            
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Funcionario
+                while(reader.Read())
                 {
-                    IdFuncionario = (int)reader["idPessoa"],
-                    Nome = (string)reader["nome"],
-                    CpfCnpj = (string)reader["cpf_cnpj"],
-                    Email = (string)reader["email"],
-                    Telefone = (string)reader["telefone"],
-                    Cargo = (string)reader["cargo"],
-                    Setor = (string)reader["setor"]
-                });
+                    lista.Add(new Funcionario
+                    {
+                        IdFuncionario = (int)reader["idPessoa"],
+                        Nome = (string)reader["nome"],
+                        CpfCnpj = (string)reader["cpf_cnpj"],
+                        Email = (string)reader["email"],
+                        Telefone = (string)reader["telefone"],
+                        Cargo = (string)reader["cargo"],
+                        Setor = (string)reader["setor"]
+                    });
+                }
             }
             return lista;
         }
@@ -67,19 +71,21 @@ namespace EmurbEstoque.Repositories
             ";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if(reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                 return new Funcionario
+                if(reader.Read())
                 {
-                    IdFuncionario = (int)reader["idPessoa"],
-                    Nome = (string)reader["nome"],
-                    CpfCnpj = (string)reader["cpf_cnpj"],
-                    Email = (string)reader["email"],
-                    Telefone = (string)reader["telefone"],
-                    Cargo = (string)reader["cargo"],
-                    Setor = (string)reader["setor"]
-                };
+                     return new Funcionario
+                    {
+                        IdFuncionario = (int)reader["idPessoa"],
+                        Nome = (string)reader["nome"],
+                        CpfCnpj = (string)reader["cpf_cnpj"],
+                        Email = (string)reader["email"],
+                        Telefone = (string)reader["telefone"],
+                        Cargo = (string)reader["cargo"],
+                        Setor = (string)reader["setor"]
+                    };
+                }
             }
             return null;
         }

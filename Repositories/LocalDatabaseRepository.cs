@@ -12,10 +12,14 @@ namespace EmurbEstoque.Repositories
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "INSERT INTO Locais (nome, descricao) VALUES (@nome, @descricao)";
+            cmd.CommandText = @"
+                INSERT INTO Locais (nome, descricao)
+                VALUES (@nome, @descricao);
+            ";
 
             cmd.Parameters.AddWithValue("@nome", local.Nome);
             cmd.Parameters.AddWithValue("@descricao", string.IsNullOrEmpty(local.Descricao) ? DBNull.Value : (object)local.Descricao);
+
             cmd.ExecuteNonQuery();
         }
 
@@ -37,7 +41,7 @@ namespace EmurbEstoque.Repositories
                         Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
                     });
                 }
-            } 
+            }
             return lista;
         }
 
@@ -52,12 +56,13 @@ namespace EmurbEstoque.Repositories
             {
                 if (reader.Read())
                 {
-                    return new Local
+                    var local = new Local
                     {
                         IdLocal = (int)reader["idLocal"],
                         Nome = (string)reader["nome"],
                         Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
                     };
+                    return local;
                 }
             } 
             return null;
@@ -67,11 +72,17 @@ namespace EmurbEstoque.Repositories
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "UPDATE Locais SET nome = @nome, descricao = @descricao WHERE idLocal = @id";
+            cmd.CommandText = @"
+                UPDATE Locais SET
+                    nome = @nome,
+                    descricao = @descricao
+                WHERE idLocal = @id;
+            ";
 
             cmd.Parameters.AddWithValue("@id", local.IdLocal);
             cmd.Parameters.AddWithValue("@nome", local.Nome);
             cmd.Parameters.AddWithValue("@descricao", string.IsNullOrEmpty(local.Descricao) ? DBNull.Value : (object)local.Descricao);
+
             cmd.ExecuteNonQuery();
         }
 

@@ -1,5 +1,6 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic; 
 
 namespace EmurbEstoque.Repositories
 {
@@ -13,7 +14,7 @@ namespace EmurbEstoque.Repositories
             cmd.CommandText = "INSERT INTO Produtos (nome, descricao) VALUES (@nome, @desc)";
 
             cmd.Parameters.AddWithValue("@nome", produto.Nome);
-            cmd.Parameters.AddWithValue("@desc", produto.Descricao);
+            cmd.Parameters.AddWithValue("@desc", string.IsNullOrEmpty(produto.Descricao) ? DBNull.Value : (object)produto.Descricao);
 
             cmd.ExecuteNonQuery();
         }
@@ -27,21 +28,23 @@ namespace EmurbEstoque.Repositories
         }
         public List<Produto> GetAll()
         {
-            var lista = new List<Produto>();
+            var lista = new List<Produto>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Produtos ORDER BY nome";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while(reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Produto
+                while(reader.Read())
                 {
-                    IdProduto = (int)reader["idProduto"],
-                    Nome = (string)reader["nome"],
-                    Descricao = (string)reader["descricao"]
-                });
-            }
+                    lista.Add(new Produto
+                    {
+                        IdProduto = (int)reader["idProduto"],
+                        Nome = (string)reader["nome"],
+                        Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
+                    });
+                }
+            } 
             return lista;
         }
         public Produto? GetById(int id)
@@ -50,16 +53,19 @@ namespace EmurbEstoque.Repositories
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Produtos WHERE idProduto = @id";
             cmd.Parameters.AddWithValue("@id", id);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if(reader.Read())
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                return new Produto
+                if(reader.Read())
                 {
-                    IdProduto = (int)reader["idProduto"],
-                    Nome = (string)reader["nome"],
-                    Descricao = (string)reader["descricao"]
-                };
-            }
+                    return new Produto
+                    {
+                        IdProduto = (int)reader["idProduto"],
+                        Nome = (string)reader["nome"],
+                        Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
+                    };
+                }
+            } 
             return null;
         }
         public void Update(Produto produto)
@@ -72,7 +78,7 @@ namespace EmurbEstoque.Repositories
                                 WHERE idProduto = @id";           
             cmd.Parameters.AddWithValue("@id", produto.IdProduto);
             cmd.Parameters.AddWithValue("@nome", produto.Nome);
-            cmd.Parameters.AddWithValue("@desc", produto.Descricao);
+            cmd.Parameters.AddWithValue("@desc", string.IsNullOrEmpty(produto.Descricao) ? DBNull.Value : (object)produto.Descricao);
             cmd.ExecuteNonQuery();
         }
     }
