@@ -38,7 +38,7 @@ namespace EmurbEstoque.Controllers
         }
         private void PrepararViewBagsCreate()
         {
-            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "Id", "Nome");
+            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "IdFuncionario", "Nome");
 
             var listaAutorizacoes = from a in _autorizacaoRepository.GetAll()
                                     join au in _autorizadoRepository.GetAll() on a.AutorizadoId equals au.IdAutorizado
