@@ -38,7 +38,7 @@ namespace EmurbEstoque.Controllers
         }
         private void PrepararViewBagsCreate()
         {
-            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "IdPessoa", "Nome");
+            ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "Id", "Nome");
 
             var listaAutorizacoes = from a in _autorizacaoRepository.GetAll()
                                     join au in _autorizadoRepository.GetAll() on a.AutorizadoId equals au.IdAutorizado
@@ -48,11 +48,12 @@ namespace EmurbEstoque.Controllers
                                         Descricao = $"{au.Funcao}  ->  {l.Nome}"
                                     };
             ViewBag.ListaAutorizacoes = new SelectList(listaAutorizacoes, "Id", "Descricao");
+            ViewBag.ListaProdutos = new MultiSelectList(_produtoRepository.GetAll(), "IdProduto", "Nome");
         }
         public IActionResult Index()
         {
             var ordens = _ordemSaidaRepository.GetAll();
-            ViewBag.NomesFuncionarios = _funcionarioRepository.Read().ToDictionary(f => f.IdPessoa, f => f.Nome);
+            ViewBag.NomesFuncionarios = _funcionarioRepository.Read().ToDictionary(f => f.IdFuncionario, f => f.Nome);
             var autorizacoesDesc = (from a in _autorizacaoRepository.GetAll()
                                     join au in _autorizadoRepository.GetAll() on a.AutorizadoId equals au.IdAutorizado
                                     join l in _localRepository.GetAll() on a.LocalId equals l.IdLocal
@@ -132,6 +133,12 @@ namespace EmurbEstoque.Controllers
         [HttpPost]
         public IActionResult AdicionarItem(ItensOS NovoItemForm)
         {
+            var ordem = _ordemSaidaRepository.GetById(NovoItemForm.OrdSaiId);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = NovoItemForm.OrdSaiId });
+            }
+
             var todosItensSaida = _itensOSRepository.GetAll();
             var loteEntrada = _loteRepository.GetById(NovoItemForm.LoteId);
             int qtdJaSaiu = todosItensSaida
@@ -157,8 +164,21 @@ namespace EmurbEstoque.Controllers
         [HttpPost] 
         public IActionResult RemoverItem(int idItemOS, int idOrdemSaida)
         {
+            var ordem = _ordemSaidaRepository.GetById(idOrdemSaida);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = idOrdemSaida });
+            }
+
             _itensOSRepository.Delete(idItemOS);
             return RedirectToAction(nameof(Details), new { id = idOrdemSaida });
+        }
+
+        [HttpPost]
+        public IActionResult Concluir(int id)
+        {
+            _ordemSaidaRepository.Concluir(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
