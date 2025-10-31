@@ -6,11 +6,11 @@ using System.Data.SqlClient;
 
 namespace EmurbEstoque.Repositories
 {
-    public class AutorizacaoSqlRepository : IAutorizacaoRepository
+    public class AutorizacaoDatabaseRepository : IAutorizacaoRepository
     {
         private readonly string _connectionString;
 
-        public AutorizacaoSqlRepository(string connectionString)
+        public AutorizacaoDatabaseRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -24,7 +24,6 @@ namespace EmurbEstoque.Repositories
             {
                 connection.Open();
 
-                // Verifica se já existe a combinação autorizacao/autorizado
                 if (Exists(autorizacao.AutorizadoId, autorizacao.LocalId))
                 {
                     Console.WriteLine($"Aviso: Tentativa de adicionar autorização duplicada para AutorizadoId={autorizacao.AutorizadoId}, LocalId={autorizacao.LocalId}");

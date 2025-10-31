@@ -5,15 +5,14 @@ using System.Collections.Generic;
 
 namespace EmurbEstoque.Repositories
 {
-    public class ItensOSDatabaseRepository : DbConnection, IItensOSRepository
+    public class ItensOSDatabaseRepository : DbConnection, IItensOSRepository 
     {
         public ItensOSDatabaseRepository(string connStr) : base(connStr) { }
 
-        // 🧾 Cria um novo item de saída
         public void Create(ItensOS itemOS)
         {
             if (itemOS == null)
-                throw new ArgumentNullException(nameof(itemOS));
+                 throw new ArgumentNullException(nameof(itemOS));
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
@@ -21,7 +20,6 @@ namespace EmurbEstoque.Repositories
                 INSERT INTO ItensOS (ordsaiId, loteId, qtd)
                 VALUES (@ordsaiId, @loteId, @qtd);
             ";
-
             cmd.Parameters.AddWithValue("@ordsaiId", itemOS.OrdSaiId);
             cmd.Parameters.AddWithValue("@loteId", itemOS.LoteId);
             cmd.Parameters.AddWithValue("@qtd", itemOS.Qtd);
@@ -29,10 +27,9 @@ namespace EmurbEstoque.Repositories
             cmd.ExecuteNonQuery();
         }
 
-        // 📋 Retorna todos os itens de saída
         public List<ItensOS> GetAll()
         {
-            var lista = new List<ItensOS>();
+            var lista = new List<ItensOS>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = @"
@@ -40,23 +37,23 @@ namespace EmurbEstoque.Repositories
                 FROM ItensOS
                 ORDER BY idItemOS;
             ";
-
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new ItensOS
+                while (reader.Read())
                 {
-                    IdItemOS = (int)reader["idItemOS"],
-                    OrdSaiId = (int)reader["ordsaiId"],
-                    LoteId = (int)reader["loteId"],
-                    Qtd = (int)reader["qtd"]
-                });
+                    lista.Add(new ItensOS
+                    {
+                        IdItemOS = (int)reader["idItemOS"],
+                        OrdSaiId = (int)reader["ordsaiId"],
+                        LoteId = (int)reader["loteId"],
+                        Qtd = (int)reader["qtd"]
+                    });
+                }
             }
-            reader.Close();
             return lista;
         }
 
-        // 🔍 Retorna um item específico pelo id
         public ItensOS? GetById(int idItemOS)
         {
             SqlCommand cmd = new SqlCommand();
@@ -66,28 +63,25 @@ namespace EmurbEstoque.Repositories
                 FROM ItensOS
                 WHERE idItemOS = @idItemOS;
             ";
-
             cmd.Parameters.AddWithValue("@idItemOS", idItemOS);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                var item = new ItensOS
+                if (reader.Read())
                 {
-                    IdItemOS = (int)reader["idItemOS"],
-                    OrdSaiId = (int)reader["ordsaiId"],
-                    LoteId = (int)reader["loteId"],
-                    Qtd = (int)reader["qtd"]
-                };
-                reader.Close();
-                return item;
-            }
-
-            reader.Close();
+                    var item = new ItensOS
+                    {
+                        IdItemOS = (int)reader["idItemOS"],
+                        OrdSaiId = (int)reader["ordsaiId"],
+                        LoteId = (int)reader["loteId"],
+                        Qtd = (int)reader["qtd"]
+                    };
+                    return item;
+                }
+            } 
             return null;
         }
 
-        // 📦 Retorna todos os itens de uma Ordem de Saída
         public List<ItensOS> GetByOrdemSaidaId(int ordemSaidaId)
         {
             var lista = new List<ItensOS>();
@@ -99,25 +93,24 @@ namespace EmurbEstoque.Repositories
                 WHERE ordsaiId = @ordsaiId
                 ORDER BY idItemOS;
             ";
-
             cmd.Parameters.AddWithValue("@ordsaiId", ordemSaidaId);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new ItensOS
+                while (reader.Read())
                 {
-                    IdItemOS = (int)reader["idItemOS"],
-                    OrdSaiId = (int)reader["ordsaiId"],
-                    LoteId = (int)reader["loteId"],
-                    Qtd = (int)reader["qtd"]
-                });
-            }
-            reader.Close();
+                    lista.Add(new ItensOS
+                    {
+                        IdItemOS = (int)reader["idItemOS"],
+                        OrdSaiId = (int)reader["ordsaiId"],
+                        LoteId = (int)reader["loteId"],
+                        Qtd = (int)reader["qtd"]
+                    });
+                }
+            } 
             return lista;
         }
 
-        // ❌ Deleta um item pelo id
         public void Delete(int idItemOS)
         {
             SqlCommand cmd = new SqlCommand();

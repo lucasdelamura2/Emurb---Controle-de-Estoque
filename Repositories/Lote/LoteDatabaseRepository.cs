@@ -1,5 +1,7 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic; 
+using System; 
 
 namespace EmurbEstoque.Repositories
 {
@@ -35,52 +37,56 @@ namespace EmurbEstoque.Repositories
 
         public List<Lote> GetByOrdemEntradaId(int ordemEntradaId)
         {
-            var lista = new List<Lote>();
+            var lista = new List<Lote>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Lote WHERE OrdEntId = @ordId";
             cmd.Parameters.AddWithValue("@ordId", ordemEntradaId);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Lote
+                while (reader.Read())
                 {
-                    IdLote = (int)reader["idLote"],
-                    ProdutoId = (int)reader["produtoId"],
-                    OrdEntId = (int)reader["OrdEntId"],
-                    Qtd = (int)reader["qtd"],
-                    Preco = (decimal)reader["preco"],
-                    DataValidade = reader["dataValidade"] == DBNull.Value ? 
-                                    null : 
-                                    (DateTime?)reader["dataValidade"]
-                });
+                    lista.Add(new Lote
+                    {
+                        IdLote = (int)reader["idLote"],
+                        ProdutoId = (int)reader["produtoId"],
+                        OrdEntId = (int)reader["OrdEntId"],
+                        Qtd = (int)reader["qtd"],
+                        Preco = (decimal)reader["preco"],
+                        DataValidade = reader["dataValidade"] == DBNull.Value ? 
+                                        null : 
+                                        (DateTime?)reader["dataValidade"]
+                    });
+                }
             }
             return lista;
         }
 
         public List<Lote> GetAll()
         {
-             var lista = new List<Lote>();
+             var lista = new List<Lote>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Lote";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Lote
+                while (reader.Read())
                 {
-                    IdLote = (int)reader["idLote"],
-                    ProdutoId = (int)reader["produtoId"],
-                    OrdEntId = (int)reader["OrdEntId"],
-                    Qtd = (int)reader["qtd"],
-                    Preco = (decimal)reader["preco"],
-                    DataValidade = reader["dataValidade"] == DBNull.Value ? 
-                                    null : 
-                                    (DateTime?)reader["dataValidade"]
-                });
-            }
+                    lista.Add(new Lote
+                    {
+                        IdLote = (int)reader["idLote"],
+                        ProdutoId = (int)reader["produtoId"],
+                        OrdEntId = (int)reader["OrdEntId"],
+                        Qtd = (int)reader["qtd"],
+                        Preco = (decimal)reader["preco"],
+                        DataValidade = reader["dataValidade"] == DBNull.Value ? 
+                                        null : 
+                                        (DateTime?)reader["dataValidade"]
+                    });
+                }
+            } 
             return lista;
         }
 
@@ -91,21 +97,23 @@ namespace EmurbEstoque.Repositories
             cmd.CommandText = "SELECT * FROM Lote WHERE idLote = @id";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                return new Lote
+                if (reader.Read())
                 {
-                    IdLote = (int)reader["idLote"],
-                    ProdutoId = (int)reader["produtoId"],
-                    OrdEntId = (int)reader["OrdEntId"],
-                    Qtd = (int)reader["qtd"],
-                    Preco = (decimal)reader["preco"],
-                    DataValidade = reader["dataValidade"] == DBNull.Value ?
-                                    null :
-                                    (DateTime?)reader["dataValidade"]
-                };
-            }
+                    return new Lote
+                    {
+                        IdLote = (int)reader["idLote"],
+                        ProdutoId = (int)reader["produtoId"],
+                        OrdEntId = (int)reader["OrdEntId"],
+                        Qtd = (int)reader["qtd"],
+                        Preco = (decimal)reader["preco"],
+                        DataValidade = reader["dataValidade"] == DBNull.Value ?
+                                        null :
+                                        (DateTime?)reader["dataValidade"]
+                    };
+                }
+            } 
             return null;
         }
         public void Delete(int id)

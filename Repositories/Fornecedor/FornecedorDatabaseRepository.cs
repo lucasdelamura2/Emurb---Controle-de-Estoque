@@ -1,5 +1,6 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic; 
 
 namespace EmurbEstoque.Repositories
 {
@@ -32,7 +33,7 @@ namespace EmurbEstoque.Repositories
 
         public List<Fornecedor> Read()
         {
-            var lista = new List<Fornecedor>();
+            var lista = new List<Fornecedor>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             
@@ -42,22 +43,21 @@ namespace EmurbEstoque.Repositories
                 ORDER BY p.nome
             ";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while(reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Fornecedor
+                while(reader.Read())
                 {
-                    // Dados de Pessoas
-                    IdFornecedor = (int)reader["idPessoa"],
-                    Nome = (string)reader["nome"],
-                    CpfCnpj = (string)reader["cpf_cnpj"],
-                    Email = (string)reader["email"],
-                    Telefone = (string)reader["telefone"],
-
-                    // Dados de Fornecedores
-                    InscricaoEstadual = (string)reader["inscricao_estadual"]
-                });
-            }
+                    lista.Add(new Fornecedor
+                    {
+                        IdFornecedor = (int)reader["idPessoa"],
+                        Nome = (string)reader["nome"],
+                        CpfCnpj = (string)reader["cpf_cnpj"],
+                        Email = (string)reader["email"],
+                        Telefone = (string)reader["telefone"],
+                        InscricaoEstadual = (string)reader["inscricao_estadual"]
+                    });
+                }
+            } 
             return lista;
         }
 
@@ -72,28 +72,26 @@ namespace EmurbEstoque.Repositories
             ";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if(reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                 return new Fornecedor
+                if(reader.Read())
                 {
-                    // Dados de Pessoas
-                    IdFornecedor = (int)reader["idPessoa"],
-                    Nome = (string)reader["nome"],
-                    CpfCnpj = (string)reader["cpf_cnpj"],
-                    Email = (string)reader["email"],
-                    Telefone = (string)reader["telefone"],
-
-                    // Dados de Fornecedores
-                    InscricaoEstadual = (string)reader["inscricao_estadual"]
-                };
-            }
+                     return new Fornecedor
+                    {
+                        IdFornecedor = (int)reader["idPessoa"],
+                        Nome = (string)reader["nome"],
+                        CpfCnpj = (string)reader["cpf_cnpj"],
+                        Email = (string)reader["email"],
+                        Telefone = (string)reader["telefone"],
+                        InscricaoEstadual = (string)reader["inscricao_estadual"]
+                    };
+                }
+            } 
             return null;
         }
 
         public void Update(Fornecedor fornecedor)
         {
-            // Atualiza as duas tabelas
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = @"
@@ -110,14 +108,10 @@ namespace EmurbEstoque.Repositories
             ";
 
             cmd.Parameters.AddWithValue("@id", fornecedor.IdFornecedor);
-
-            // Parâmetros da Tabela Pessoas
             cmd.Parameters.AddWithValue("@nome", fornecedor.Nome);
             cmd.Parameters.AddWithValue("@cpf_cnpj", fornecedor.CpfCnpj);
             cmd.Parameters.AddWithValue("@email", fornecedor.Email);
             cmd.Parameters.AddWithValue("@tel", fornecedor.Telefone);
-
-            // Parâmetros da Tabela Fornecedores
             cmd.Parameters.AddWithValue("@insc_estadual", fornecedor.InscricaoEstadual);
 
             cmd.ExecuteNonQuery();

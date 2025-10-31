@@ -15,7 +15,7 @@ builder.Services.AddTransient<ILocalRepository>(_ => new LocalDatabaseRepository
 builder.Services.AddTransient<IAutorizadoRepository>(_ => new AutorizadoDatabaseRepository(connectionString));
 builder.Services.AddTransient<IAutorizacaoRepository>(_ => new AutorizacaoDatabaseRepository(connectionString));
 builder.Services.AddTransient<IEstoqueRepository>(_ => new EstoqueDatabaseRepository(connectionString));
-builder.Services.AddTransient<IItensRepository>(_ => new ItensDatabaseRepository(connectionString));
+builder.Services.AddTransient<IItensOSRepository>(_ => new ItensOSDatabaseRepository(connectionString));
 builder.Services.AddTransient<IPessoaRepository>(_ => new PessoaDatabaseRepository(connectionString));
 
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();

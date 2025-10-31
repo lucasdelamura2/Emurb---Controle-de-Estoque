@@ -18,29 +18,30 @@ namespace EmurbEstoque.Repositories
             ";
 
             cmd.Parameters.AddWithValue("@nome", local.Nome);
-            cmd.Parameters.AddWithValue("@descricao", (object?)local.Descricao ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@descricao", string.IsNullOrEmpty(local.Descricao) ? DBNull.Value : (object)local.Descricao);
 
             cmd.ExecuteNonQuery();
         }
 
         public List<Local> GetAll()
         {
-            var lista = new List<Local>();
+            var lista = new List<Local>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Locais ORDER BY nome";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Local
+                while (reader.Read())
                 {
-                    IdLocal = (int)reader["idLocal"],
-                    Nome = (string)reader["nome"],
-                    Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
-                });
+                    lista.Add(new Local
+                    {
+                        IdLocal = (int)reader["idLocal"],
+                        Nome = (string)reader["nome"],
+                        Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
+                    });
+                }
             }
-            reader.Close();
             return lista;
         }
 
@@ -51,19 +52,19 @@ namespace EmurbEstoque.Repositories
             cmd.CommandText = "SELECT * FROM Locais WHERE idLocal = @id";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                var local = new Local
+                if (reader.Read())
                 {
-                    IdLocal = (int)reader["idLocal"],
-                    Nome = (string)reader["nome"],
-                    Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
-                };
-                reader.Close();
-                return local;
-            }
-            reader.Close();
+                    var local = new Local
+                    {
+                        IdLocal = (int)reader["idLocal"],
+                        Nome = (string)reader["nome"],
+                        Descricao = reader["descricao"] == DBNull.Value ? null : (string)reader["descricao"]
+                    };
+                    return local;
+                }
+            } 
             return null;
         }
 
@@ -80,7 +81,7 @@ namespace EmurbEstoque.Repositories
 
             cmd.Parameters.AddWithValue("@id", local.IdLocal);
             cmd.Parameters.AddWithValue("@nome", local.Nome);
-            cmd.Parameters.AddWithValue("@descricao", (object?)local.Descricao ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@descricao", string.IsNullOrEmpty(local.Descricao) ? DBNull.Value : (object)local.Descricao);
 
             cmd.ExecuteNonQuery();
         }

@@ -15,7 +15,6 @@ namespace EmurbEstoque.Repositories
             if (autorizacao == null) throw new ArgumentNullException(nameof(autorizacao));
             if (Exists(autorizacao.AutorizadoId, autorizacao.LocalId))
             {
-                 // Poderia lançar uma exceção ou retornar um status indicando duplicidade
                  Console.WriteLine($"Aviso: Tentativa de adicionar autorização duplicada para AutorizadoId={autorizacao.AutorizadoId}, LocalId={autorizacao.LocalId}");
                  return; 
             }

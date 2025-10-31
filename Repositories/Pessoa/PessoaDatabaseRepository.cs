@@ -21,7 +21,6 @@ namespace EmurbEstoque.Repositories
             _fornecedorRepository = fornecedorRepository;
         }
 
-        // 🔍 Busca uma pessoa pelo ID (tenta nas duas tabelas)
         public Pessoa? GetById(int id)
         {
             Pessoa? pessoa = _funcionarioRepository.Read(id);
@@ -31,7 +30,6 @@ namespace EmurbEstoque.Repositories
             return pessoa;
         }
 
-        // 📋 Retorna todas as pessoas (funcionários + fornecedores)
         public List<Pessoa> GetAll()
         {
             var todas = new List<Pessoa>();
@@ -40,7 +38,6 @@ namespace EmurbEstoque.Repositories
             return todas.OrderBy(p => p.Nome).ToList();
         }
 
-        // ✏️ Atualiza dados básicos da pessoa (independente do tipo)
         public void Update(Pessoa pessoa)
         {
             if (pessoa is Funcionario funcionario)
@@ -53,7 +50,6 @@ namespace EmurbEstoque.Repositories
             }
             else
             {
-                // Atualiza apenas tabela Pessoas
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
                 cmd.CommandText = @"
@@ -75,7 +71,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🔎 Verifica se já existe CPF/CNPJ em Funcionários, Fornecedores ou Pessoas
         public bool CpfCnpjExists(string cpfCnpj)
         {
             if (string.IsNullOrWhiteSpace(cpfCnpj))
@@ -83,7 +78,6 @@ namespace EmurbEstoque.Repositories
 
             bool exists = false;
 
-            // 1️⃣ Verifica na tabela Pessoas
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT COUNT(*) FROM Pessoas WHERE cpf_cnpj = @cpf_cnpj";
@@ -92,7 +86,6 @@ namespace EmurbEstoque.Repositories
             int count = (int)cmd.ExecuteScalar();
             exists = count > 0;
 
-            // 2️⃣ Se não achou, verifica nas tabelas derivadas
             if (!exists)
             {
                 var funcionarios = _funcionarioRepository.Read();

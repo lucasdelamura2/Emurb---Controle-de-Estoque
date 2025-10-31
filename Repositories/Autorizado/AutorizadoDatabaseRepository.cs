@@ -23,21 +23,22 @@ namespace EmurbEstoque.Repositories
 
         public List<Autorizado> GetAll()
         {
-            var lista = new List<Autorizado>();
+            var lista = new List<Autorizado>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Autorizados ORDER BY funcao;";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                lista.Add(new Autorizado
+                while (reader.Read())
                 {
-                    IdAutorizado = (int)reader["idAutorizado"],
-                    Funcao = (string)reader["funcao"]
-                });
-            }
-            reader.Close();
+                    lista.Add(new Autorizado
+                    {
+                        IdAutorizado = (int)reader["idAutorizado"],
+                        Funcao = (string)reader["funcao"]
+                    });
+                }
+            } 
             return lista;
         }
 
@@ -48,18 +49,18 @@ namespace EmurbEstoque.Repositories
             cmd.CommandText = "SELECT * FROM Autorizados WHERE idAutorizado = @id;";
             cmd.Parameters.AddWithValue("@id", id);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                var autorizado = new Autorizado
+                if (reader.Read())
                 {
-                    IdAutorizado = (int)reader["idAutorizado"],
-                    Funcao = (string)reader["funcao"]
-                };
-                reader.Close();
-                return autorizado;
-            }
-            reader.Close();
+                    var autorizado = new Autorizado
+                    {
+                        IdAutorizado = (int)reader["idAutorizado"],
+                        Funcao = (string)reader["funcao"]
+                    };
+                    return autorizado;
+                }
+            } 
             return null;
         }
 

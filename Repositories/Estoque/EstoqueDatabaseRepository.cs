@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace EmurbEstoque.Repositories
 {
-    public class EstoqueSqlRepository : IEstoqueRepository
+    public class EstoqueDatabasepository : IEstoqueRepository
     {
         private readonly string _connectionString;
         private readonly IProdutoRepository _produtoRepo;
         private readonly ILoteRepository _loteRepo;
         private readonly IItensOSRepository _itensOSRepo;
 
-        public EstoqueSqlRepository(
+        public EstoqueDatabasepository(
             string connectionString,
             IProdutoRepository produtoRepository,
             ILoteRepository loteRepository,
@@ -25,7 +25,6 @@ namespace EmurbEstoque.Repositories
             _itensOSRepo = itensOSRepository;
         }
 
-        // 📊 Gera uma visão consolidada (igual ao MemoryRepository)
         public List<Estoque> GetEstoqueConsolidado()
         {
             var todosProdutos = _produtoRepo.GetAll();
@@ -51,7 +50,6 @@ namespace EmurbEstoque.Repositories
 
                 int saldoAtual = totalEntrada - totalSaida;
 
-                // Atualiza ou insere no banco
                 UpsertEstoque(produto.IdProduto, saldoAtual);
 
                 estoqueConsolidado.Add(new Estoque
@@ -67,7 +65,6 @@ namespace EmurbEstoque.Repositories
             return estoqueConsolidado.OrderBy(p => p.NomeProduto).ToList();
         }
 
-        // 🧾 Obtém todos os registros da tabela Estoque
         public List<Estoque> GetAll()
         {
             var lista = new List<Estoque>();
@@ -100,7 +97,6 @@ namespace EmurbEstoque.Repositories
             return lista;
         }
 
-        // 🔍 Obtém um estoque por produto
         public Estoque? GetByProdutoId(int produtoId)
         {
             Estoque? estoque = null;
@@ -131,7 +127,6 @@ namespace EmurbEstoque.Repositories
             return estoque;
         }
 
-        // 🔄 Atualiza ou insere se não existir
         private void UpsertEstoque(int produtoId, int quantidadeAtual)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -148,14 +143,12 @@ namespace EmurbEstoque.Repositories
                 SqlCommand command;
                 if (count > 0)
                 {
-                    // Atualiza quantidade
                     command = new SqlCommand(
                         "UPDATE Estoque SET quantidadeAtual = @quantidadeAtual WHERE produtoId = @produtoId",
                         connection);
                 }
                 else
                 {
-                    // Insere novo
                     command = new SqlCommand(
                         "INSERT INTO Estoque (produtoId, quantidadeAtual) VALUES (@produtoId, @quantidadeAtual)",
                         connection);
