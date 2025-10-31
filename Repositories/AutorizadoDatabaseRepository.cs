@@ -7,11 +7,16 @@ namespace EmurbEstoque.Repositories
     public class AutorizadoDatabaseRepository : DbConnection, IAutorizadoRepository
     {
         public AutorizadoDatabaseRepository(string connStr) : base(connStr) { }
+
         public void Create(Autorizado autorizado)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "INSERT INTO Autorizados (funcao) VALUES (@funcao)";
+            cmd.CommandText = @"
+                INSERT INTO Autorizados (funcao)
+                VALUES (@funcao);
+            ";
+
             cmd.Parameters.AddWithValue("@funcao", autorizado.Funcao);
             cmd.ExecuteNonQuery();
         }
@@ -21,7 +26,7 @@ namespace EmurbEstoque.Repositories
             var lista = new List<Autorizado>(); 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "SELECT * FROM Autorizados ORDER BY funcao";
+            cmd.CommandText = "SELECT * FROM Autorizados ORDER BY funcao;";
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
@@ -41,18 +46,19 @@ namespace EmurbEstoque.Repositories
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "SELECT * FROM Autorizados WHERE idAutorizado = @id";
+            cmd.CommandText = "SELECT * FROM Autorizados WHERE idAutorizado = @id;";
             cmd.Parameters.AddWithValue("@id", id);
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    return new Autorizado
+                    var autorizado = new Autorizado
                     {
                         IdAutorizado = (int)reader["idAutorizado"],
                         Funcao = (string)reader["funcao"]
                     };
+                    return autorizado;
                 }
             } 
             return null;
@@ -62,9 +68,15 @@ namespace EmurbEstoque.Repositories
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "UPDATE Autorizados SET funcao = @funcao WHERE idAutorizado = @id";
+            cmd.CommandText = @"
+                UPDATE Autorizados
+                SET funcao = @funcao
+                WHERE idAutorizado = @id;
+            ";
+
             cmd.Parameters.AddWithValue("@id", autorizado.IdAutorizado);
             cmd.Parameters.AddWithValue("@funcao", autorizado.Funcao);
+
             cmd.ExecuteNonQuery();
         }
 
@@ -72,8 +84,9 @@ namespace EmurbEstoque.Repositories
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = "DELETE FROM Autorizados WHERE idAutorizado = @id";
+            cmd.CommandText = "DELETE FROM Autorizados WHERE idAutorizado = @id;";
             cmd.Parameters.AddWithValue("@id", id);
+
             cmd.ExecuteNonQuery();
         }
     }
