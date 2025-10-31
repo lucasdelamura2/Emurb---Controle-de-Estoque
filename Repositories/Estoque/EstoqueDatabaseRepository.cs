@@ -1,19 +1,19 @@
 using EmurbEstoque.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 
 namespace EmurbEstoque.Repositories
 {
-    public class EstoqueDatabasepository : IEstoqueRepository
+    public class EstoqueDatabaseRepository : IEstoqueRepository
     {
         private readonly string _connectionString;
         private readonly IProdutoRepository _produtoRepo;
         private readonly ILoteRepository _loteRepo;
         private readonly IItensOSRepository _itensOSRepo;
 
-        public EstoqueDatabasepository(
+        public EstoqueDatabaseRepository(
             string connectionString,
             IProdutoRepository produtoRepository,
             ILoteRepository loteRepository,
