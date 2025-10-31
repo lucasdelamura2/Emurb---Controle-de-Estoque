@@ -36,6 +36,7 @@ namespace EmurbEstoque.Controllers
             _loteRepository = loteRepository;
             _produtoRepository = produtoRepository;
         }
+
         private void PrepararViewBagsCreate()
         {
             ViewBag.ListaFuncionarios = new SelectList(_funcionarioRepository.Read(), "IdPessoa", "Nome");
@@ -49,6 +50,7 @@ namespace EmurbEstoque.Controllers
                                     };
             ViewBag.ListaAutorizacoes = new SelectList(listaAutorizacoes, "Id", "Descricao");
         }
+
         public IActionResult Index()
         {
             var ordens = _ordemSaidaRepository.GetAll();
@@ -62,11 +64,13 @@ namespace EmurbEstoque.Controllers
 
             return View(ordens);
         }
+
         public IActionResult Create()
         {
             PrepararViewBagsCreate();
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(OrdemSaida ordem)
         {
@@ -75,13 +79,16 @@ namespace EmurbEstoque.Controllers
                 PrepararViewBagsCreate();
                 return View(ordem);
             }
+
             var ordemCriada = _ordemSaidaRepository.Create(ordem);
             return RedirectToAction(nameof(Details), new { id = ordemCriada.IdOrdSai });
         }
+
         private IActionResult PrepararDetailsView(int id, ItensOS? formModelComErro = null)
         {
             var ordem = _ordemSaidaRepository.GetById(id);
             if (ordem == null) return NotFound("Ordem de Saída não encontrada.");
+
             var todosItensSaida = _itensOSRepository.GetAll(); 
             var todosLotesEntrada = _loteRepository.GetAll(); 
 
@@ -107,10 +114,12 @@ namespace EmurbEstoque.Controllers
                     Id = l.IdLote,
                     Descricao = $"Lote {l.IdLote} ({nomesProdutos.GetValueOrDefault(l.ProdutoId, "???")}) - Saldo: {l.EstoqueAtual}"
                 });
+
             var funcionario = _funcionarioRepository.Read(ordem.IdFuncionario);
             var autorizacao = _autorizacaoRepository.GetById(ordem.AutorizaId);
             var autorizado = autorizacao != null ? _autorizadoRepository.GetById(autorizacao.AutorizadoId) : null;
             var local = autorizacao != null ? _localRepository.GetById(autorizacao.LocalId) : null;
+
             var viewModel = new OrdemSaidaDetailsViewModel
             {
                 Ordem = ordem,
@@ -120,18 +129,28 @@ namespace EmurbEstoque.Controllers
                 NovoItemForm = formModelComErro ?? new ItensOS { OrdSaiId = id },
                 ListaLotesDisponiveis = new SelectList(listaLotesParaDropdown, "Id", "Descricao")
             };
+
             ViewBag.LotesInfo = todosLotesEntrada.ToDictionary(l => l.IdLote);
             ViewBag.NomesProdutos = nomesProdutos;
+
             return View("Details", viewModel);
         }
+
         [HttpGet]
         public IActionResult Details(int id)
         {
             return PrepararDetailsView(id);
         }
+
         [HttpPost]
         public IActionResult AdicionarItem(ItensOS NovoItemForm)
         {
+            var ordem = _ordemSaidaRepository.GetById(NovoItemForm.OrdSaiId);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = NovoItemForm.OrdSaiId });
+            }
+
             var todosItensSaida = _itensOSRepository.GetAll();
             var loteEntrada = _loteRepository.GetById(NovoItemForm.LoteId);
             int qtdJaSaiu = todosItensSaida
@@ -154,11 +173,25 @@ namespace EmurbEstoque.Controllers
                 return PrepararDetailsView(NovoItemForm.OrdSaiId, NovoItemForm);
             }
         }
+
         [HttpPost] 
         public IActionResult RemoverItem(int idItemOS, int idOrdemSaida)
         {
+            var ordem = _ordemSaidaRepository.GetById(idOrdemSaida);
+            if (ordem?.Status == "Concluída")
+            {
+                return RedirectToAction(nameof(Details), new { id = idOrdemSaida });
+            }
+
             _itensOSRepository.Delete(idItemOS);
             return RedirectToAction(nameof(Details), new { id = idOrdemSaida });
+        }
+
+        [HttpPost]
+        public IActionResult Concluir(int id)
+        {
+            _ordemSaidaRepository.Concluir(id);
+            return RedirectToAction(nameof(Index)); 
         }
     }
 }

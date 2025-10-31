@@ -1,0 +1,107 @@
+using EmurbEstoque.Models;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+
+namespace EmurbEstoque.Repositories
+{
+    public class OrdemSaidaDatabaseRepository : DbConnection, IOrdemSaidaRepository
+    {
+        public OrdemSaidaDatabaseRepository(string connStr) : base(connStr) { }
+
+        // 🔹 Inserir nova Ordem de Saída
+        public OrdemSaida Create(OrdemSaida ordemSaida)
+        {
+            if (ordemSaida == null)
+                throw new ArgumentNullException(nameof(ordemSaida));
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = @"
+                    INSERT INTO OrdemSaida (funcId, autorizaId, dataSaida, status)
+                    VALUES (@funcId, @autorizaId, @dataSaida, @status);
+                    SELECT SCOPE_IDENTITY();
+                ";
+
+                cmd.Parameters.AddWithValue("@funcId", ordemSaida.FuncId);
+                cmd.Parameters.AddWithValue("@autorizaId", ordemSaida.AutorizaId);
+                cmd.Parameters.AddWithValue("@dataSaida", ordemSaida.DataSaida);
+                cmd.Parameters.AddWithValue("@status", ordemSaida.Status ?? "Aberta");
+
+                var newId = Convert.ToInt32(cmd.ExecuteScalar());
+                ordemSaida.IdOrdSai = newId;
+                return ordemSaida;
+            }
+        }
+
+        // 🔹 Buscar todas as Ordens de Saída
+        public List<OrdemSaida> GetAll()
+        {
+            var lista = new List<OrdemSaida>();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = "SELECT * FROM OrdemSaida ORDER BY dataSaida DESC";
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new OrdemSaida
+                        {
+                            IdOrdSai = (int)reader["idOrdSai"],
+                            FuncId = (int)reader["funcId"],
+                            AutorizaId = (int)reader["autorizaId"],
+                            DataSaida = (DateTime)reader["dataSaida"],
+                            Status = reader["status"].ToString()!
+                        });
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        // 🔹 Buscar por ID
+        public OrdemSaida? GetById(int id)
+        {
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = "SELECT * FROM OrdemSaida WHERE idOrdSai = @id";
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new OrdemSaida
+                        {
+                            IdOrdSai = (int)reader["idOrdSai"],
+                            FuncId = (int)reader["funcId"],
+                            AutorizaId = (int)reader["autorizaId"],
+                            DataSaida = (DateTime)reader["dataSaida"],
+                            Status = reader["status"].ToString()!
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        // 🔹 Concluir uma Ordem de Saída
+        public void Concluir(int id)
+        {
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = "UPDATE OrdemSaida SET status = 'Concluída' WHERE idOrdSai = @id";
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+}

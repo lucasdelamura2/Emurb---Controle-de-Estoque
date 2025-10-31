@@ -13,6 +13,11 @@ builder.Services.AddTransient<IOrdemEntradaRepository>(_ => new OrdemEntradaData
 builder.Services.AddTransient<ILoteRepository>(_ => new LoteDatabaseRepository(connectionString));
 builder.Services.AddTransient<ILocalRepository>(_ => new LocalDatabaseRepository(connectionString));
 builder.Services.AddTransient<IAutorizadoRepository>(_ => new AutorizadoDatabaseRepository(connectionString));
+builder.Services.AddTransient<IAutorizacaoRepository>(_ => new AutorizacaoDatabaseRepository(connectionString));
+builder.Services.AddTransient<IEstoqueRepository>(_ => new EstoqueDatabaseRepository(connectionString));
+builder.Services.AddTransient<IItensRepository>(_ => new ItensDatabaseRepository(connectionString));
+builder.Services.AddTransient<IPessoaRepository>(_ => new PessoaDatabaseRepository(connectionString));
+builder.Services.AddTransient<IOrdemSaidaRepository>(_ => new OrdemSaidaDatabaseRepository(connectionString));
 
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();
 // builder.Services.AddSingleton<IProdutoRepository, ProdutoMemoryRepository>(); 
@@ -21,10 +26,10 @@ builder.Services.AddTransient<IAutorizadoRepository>(_ => new AutorizadoDatabase
 // builder.Services.AddSingleton<ILoteRepository, LoteMemoryRepository>();
 //builder.Services.AddSingleton<ILocalRepository, LocalMemoryRepository>();              
 //builder.Services.AddSingleton<IAutorizadoRepository, AutorizadoMemoryRepository>();    
-builder.Services.AddSingleton<IAutorizacaoRepository, AutorizacaoMemoryRepository>();  
-builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();    
-builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();
-builder.Services.AddSingleton<IEstoqueRepository, EstoqueMemoryRepository>();
+//builder.Services.AddSingleton<IAutorizacaoRepository, AutorizacaoMemoryRepository>();  
+//builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();    
+//builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();
+//builder.Services.AddSingleton<IEstoqueRepository, EstoqueMemoryRepository>();
 
 
 var app = builder.Build();
