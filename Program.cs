@@ -12,7 +12,7 @@ builder.Services.AddTransient<IFornecedorRepository>(_ => new FornecedorDatabase
 builder.Services.AddTransient<IOrdemEntradaRepository>(_ => new OrdemEntradaDatabaseRepository(connectionString));
 builder.Services.AddTransient<ILoteRepository>(_ => new LoteDatabaseRepository(connectionString));
 builder.Services.AddTransient<ILocalRepository>(_ => new LocalDatabaseRepository(connectionString));
-builder.Services.AddTransient<IAutorizacaoRepository>(_ => new AutorizacaoDatabaseRepository(connectionString));
+builder.Services.AddTransient<IAutorizadoRepository>(_ => new AutorizadoDatabaseRepository(connectionString));
 
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();
 // builder.Services.AddSingleton<IProdutoRepository, ProdutoMemoryRepository>(); 
