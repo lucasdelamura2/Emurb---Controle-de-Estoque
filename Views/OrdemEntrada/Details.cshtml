@@ -3,8 +3,7 @@
     ViewData["Title"] = "Lançar Itens na Ordem";
     Layout = "~/Views/_Layout.cshtml";
     var nomesProdutos = ViewBag.NomesProdutos as Dictionary<int, string>;
-    
-    // Variável para facilitar a leitura da lógica
+
     bool isAberta = Model.Ordem.Status == "Aberta";
 }
 

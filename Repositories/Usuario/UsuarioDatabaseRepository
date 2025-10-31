@@ -9,7 +9,6 @@ namespace EmurbEstoque.Repositories
     {
         public UsuarioDatabaseRepository(string connStr) : base(connStr) { }
 
-        // 🔹 Cria um novo usuário no banco
         public Usuario? Create(Usuario usuario)
         {
             if (usuario == null)
@@ -38,7 +37,6 @@ namespace EmurbEstoque.Repositories
             return usuario;
         }
 
-        // 🔹 Verifica credenciais (login)
         public Usuario? ValidateCredentials(string email, string senhaPura)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senhaPura))
@@ -65,7 +63,6 @@ namespace EmurbEstoque.Repositories
             return null;
         }
 
-        // 🔹 Busca usuário pelo e-mail
         public Usuario? GetByEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email)) return null;
@@ -81,7 +78,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🔹 Busca usuário pelo ID
         public Usuario? GetById(int id)
         {
             string sql = "SELECT * FROM Usuarios WHERE idUsuario = @Id";
@@ -95,7 +91,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🔹 Verifica se e-mail já existe
         public bool EmailExists(string email)
         {
             string sql = "SELECT COUNT(*) FROM Usuarios WHERE email = @Email";
@@ -107,7 +102,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🔹 Lista todos os usuários
         public List<Usuario> GetAll()
         {
             List<Usuario> lista = new();
@@ -125,7 +119,6 @@ namespace EmurbEstoque.Repositories
             return lista;
         }
 
-        // 🔹 Atualiza dados do usuário
         public void Update(Usuario usuario)
         {
             if (usuario == null)
@@ -153,7 +146,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🔹 Remove usuário
         public void Delete(int id)
         {
             string sql = "DELETE FROM Usuarios WHERE idUsuario = @Id";
@@ -164,7 +156,6 @@ namespace EmurbEstoque.Repositories
             }
         }
 
-        // 🧠 Método auxiliar para mapear o SqlDataReader → objeto Usuario
         private Usuario Map(SqlDataReader reader)
         {
             return new Usuario
