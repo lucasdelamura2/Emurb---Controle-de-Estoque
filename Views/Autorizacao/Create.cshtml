@@ -5,10 +5,9 @@
 }
 
 <h1 class="mb-4">Nova Autorização</h1>
-<p>Crie a regra que permite uma Função específica retirar material para um Local específico.</p>
+<p>Selcione a Função específica para retirar o material para um Local específico.</p>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken() <div asp-validation-summary="All" class="alert alert-danger"></div>
 
     <div class="mb-3">
         <label asp-for="AutorizadoId" class="form-label"></label>
