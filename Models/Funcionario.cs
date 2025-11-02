@@ -2,7 +2,8 @@ namespace EmurbEstoque.Models;
 using System.ComponentModel.DataAnnotations;
 
 public class Funcionario : Pessoa
-{   public int IdFuncionario { get { return IdPessoa; } set { IdPessoa = value; } }
+{   
+    public int IdFuncionario { get { return IdPessoa; } set { IdPessoa = value; } }
 
     [Display(Name = "Cargo")]
     [Required(ErrorMessage = "O campo Cargo é obrigatório.")]

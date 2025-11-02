@@ -21,14 +21,13 @@ namespace EmurbEstoque.Controllers
         [HttpPost]
         public IActionResult Create(Funcionario funcionario)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(funcionario);
+            }
+
             _repository.Create(funcionario);
             return RedirectToAction(nameof(Index));
-        }
-        public IActionResult Details(int id)
-        {
-            var f = _repository.Read(id);
-            if (f is null) return NotFound();
-            return View(f);
         }
         [HttpGet]
         public IActionResult Edit(int id)
