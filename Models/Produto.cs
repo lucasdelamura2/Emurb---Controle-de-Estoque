@@ -11,6 +11,7 @@ public class Produto
     public string Nome { get; set; } = "";
 
     [Display(Name = "Descrição")] 
+    [Required(ErrorMessage = "O campo Descrição é obrigatório.")] 
     [StringLength(255, ErrorMessage = "A Descrição deve ter no máximo 255 caracteres.")] 
     public string? Descricao { get; set; }
 }
