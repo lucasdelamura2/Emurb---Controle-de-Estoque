@@ -39,6 +39,11 @@ namespace EmurbEstoque.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Funcionario dados)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(dados);
+            }
+
             dados.IdFuncionario = id;          
             _repository.Update(dados);
             return RedirectToAction(nameof(Index));
@@ -48,6 +53,15 @@ namespace EmurbEstoque.Controllers
         {
             _repository.Delete(id);
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Details(int id)
+        {
+            var f = _repository.Read(id);
+            if (f is null) 
+            {
+                return NotFound();
+            }
+            return View(f); 
         }
     }
 }
