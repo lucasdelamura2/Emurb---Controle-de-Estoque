@@ -65,8 +65,8 @@
 
 @if (isAberta)
 {
-    <h3 class="h5">Adicionar Item (Retirada de Lote)</h3>
     <form asp-action="AdicionarItem" method="post" id="form-add-item" class="row g-3 p-3 border rounded mb-4">
+    <h3 class="h5">Adicionar Item (Retirada de Lote)</h3>
         @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 

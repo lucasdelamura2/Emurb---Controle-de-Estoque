@@ -47,10 +47,10 @@ namespace EmurbEstoque.Controllers
             var ordemCriada = _ordemEntradaRepository.Create(ordem);
             return RedirectToAction(nameof(Details), new { id = ordemCriada.IdOrdEnt });
         }
-        public IActionResult Details(int id)
+        private OrdemEntradaDetailsViewModel PrepararDetailsViewModel(int id, Lote? loteForm = null)
         {
             var ordem = _ordemEntradaRepository.GetById(id);
-            if (ordem == null) return NotFound();
+            if (ordem == null) return null; 
 
             var fornecedor = _fornecedorRepository.Read(ordem.IdFornecedor); 
             var lotesNaOrdem = _loteRepository.GetByOrdemEntradaId(id);
@@ -61,10 +61,18 @@ namespace EmurbEstoque.Controllers
                 Ordem = ordem,
                 NomeFornecedor = fornecedor?.Nome ?? "Fornecedor não encontrado",
                 ItensDaOrdem = lotesNaOrdem,
-                NovoLoteForm = new Lote { OrdEntId = id },
+                NovoLoteForm = loteForm ?? new Lote { OrdEntId = id },
                 ListaProdutos = new SelectList(todosProdutos, "IdProduto", "Nome")
             };
             ViewBag.NomesProdutos = todosProdutos.ToDictionary(p => p.IdProduto, p => p.Nome);
+
+            return viewModel;
+        }
+
+        public IActionResult Details(int id)
+        {
+            var viewModel = PrepararDetailsViewModel(id);
+            if (viewModel == null) return NotFound();
 
             return View(viewModel);
         }
@@ -81,13 +89,15 @@ namespace EmurbEstoque.Controllers
             if (ModelState.IsValid)
             {
                 _loteRepository.Create(NovoLoteForm);
+                return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
             }
             else
             {
-                return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
+                var viewModel = PrepararDetailsViewModel(NovoLoteForm.OrdEntId, NovoLoteForm);
+                if (viewModel == null) return NotFound();
+                
+                return View("Details", viewModel);
             }
-            
-            return RedirectToAction(nameof(Details), new { id = NovoLoteForm.OrdEntId });
         }
         
         [HttpPost]

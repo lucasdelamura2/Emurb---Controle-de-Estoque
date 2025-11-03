@@ -3,131 +3,127 @@
     Layout = "~/Views/_Layout.cshtml"; 
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h1 class="fw-bold">Sistema de Controle de Estoques</h1>
-        <p class="text-muted">Gerencie de forma prática os produtos, funcionários e movimentações do estoque.</p>
-    </div>
-
-    <div class="row g-4">
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-box-open fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Produtos</h5>
-                        <p class="card-text">Cadastre os produtos que sua empresa utiliza.</p>
-                    </div>
-                    <a asp-controller="Produto" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-arrow-down fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">Ordem de Entrada</h5>
-                        <p class="card-text">Registre a entrada de lotes e materiais no estoque.</p>
-                    </div>
-                    <a asp-controller="OrdemEntrada" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-arrow-up fa-3x text-danger mb-3"></i>
-                        <h5 class="card-title">Ordem de Saída</h5>
-                        <p class="card-text">Registre a baixa de materiais e a saída de lotes.</p>
-                    </div>
-                    <a asp-controller="OrdemSaida" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-users fa-3x text-secondary mb-3"></i>
-                        <h5 class="card-title">Funcionários</h5>
-                        <p class="card-text">Gerencie os funcionários cadastrados no sistema.</p>
-                    </div>
-                    <a asp-controller="Funcionario" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-truck-moving fa-3x text-info mb-3"></i>
-                        <h5 class="card-title">Fornecedores</h5>
-                        <p class="card-text">Gerencie os fornecedores de materiais.</p>
-                    </div>
-                    <a asp-controller="Fornecedor" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                     <div>
-                        <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
-                        <h5 class="card-title">Locais de Destino</h5>
-                        <p class="card-text">Cadastre as obras ou locais que recebem material.</p>
-                    </div>
-                    <a asp-controller="Local" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-id-badge fa-3x text-dark mb-3"></i>
-                        <h5 class="card-title">Funções Autorizadas</h5>
-                        <p class="card-text">Cadastre os cargos que podem requisitar material.</p>
-                    </div>
-                    <a asp-controller="Autorizado" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                 <div class="card-body d-flex flex-column justify-content-between">
-                     <div>
-                        <i class="fas fa-clipboard-check fa-3x text-secondary mb-3"></i>
-                        <h5 class="card-title">Autorizações</h5>
-                        <p class="card-text">Defina qual Função pode retirar para qual Local.</p>
-                    </div>
-                    <a asp-controller="Autorizacao" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card text-center h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <i class="fas fa-warehouse fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Estoque Atual</h5>
-                        <p class="card-text">Consulte o saldo de produtos em estoque.</p>
-                    </div>
-                    <a asp-controller="Estoque" asp-action="Index" class="btn btn-primary mt-auto">Consultar</a>
-                </div>
-            </div>
-        </div>
-
-        </div>
+<div class="text-center mb-5">
+    <h1 class="fw-bold text-primary">Sistema de Controle de Estoques</h1>
+    <p class="text-muted fs-5">Gerencie de forma prática os produtos, funcionários e movimentações do estoque.</p>
 </div>
 
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-box-open fa-3x text-primary mb-3"></i>
+                    <h5 class="fw-semibold">Produtos</h5>
+                    <p class="text-muted">Cadastre os produtos utilizados pela empresa.</p>
+                </div>
+                <a asp-controller="Produto" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-arrow-down fa-3x text-success mb-3"></i>
+                    <h5 class="fw-semibold">Ordem de Entrada</h5>
+                    <p class="text-muted">Registre a entrada de lotes e materiais no estoque.</p>
+                </div>
+                <a asp-controller="OrdemEntrada" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-arrow-up fa-3x text-danger mb-3"></i>
+                    <h5 class="fw-semibold">Ordem de Saída</h5>
+                    <p class="text-muted">Registre a baixa de materiais e a saída de lotes.</p>
+                </div>
+                <a asp-controller="OrdemSaida" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-users fa-3x text-secondary mb-3"></i>
+                    <h5 class="fw-semibold">Funcionários</h5>
+                    <p class="text-muted">Gerencie os funcionários cadastrados no sistema.</p>
+                </div>
+                <a asp-controller="Funcionario" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-truck-moving fa-3x text-info mb-3"></i>
+                    <h5 class="fw-semibold">Fornecedores</h5>
+                    <p class="text-muted">Gerencie os fornecedores de materiais.</p>
+                </div>
+                <a asp-controller="Fornecedor" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="fw-semibold">Locais de Destino</h5>
+                    <p class="text-muted">Cadastre as obras ou locais que recebem material.</p>
+                </div>
+                <a asp-controller="Local" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="fw-semibold">Autorizados</h5>
+                    <p class="text-muted">Cadastre as funções autorizadas para liberar as ordens de saída.</p>
+                </div>
+                <a asp-controller="Local" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-clipboard-check fa-3x text-secondary mb-3"></i>
+                    <h5 class="fw-semibold">Autorizações</h5>
+                    <p class="text-muted">Defina qual Função pode retirar para qual Local.</p>
+                </div>
+                <a asp-controller="Autorizacao" asp-action="Index" class="btn btn-primary mt-auto">Acessar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <i class="fas fa-warehouse fa-3x text-primary mb-3"></i>
+                    <h5 class="fw-semibold">Estoque Atual</h5>
+                    <p class="text-muted">Consulte o saldo de produtos em estoque.</p>
+                </div>
+                <a asp-controller="Estoque" asp-action="Index" class="btn btn-primary mt-auto">Consultar</a>
+            </div>
+        </div>
+    </div>
+</div>

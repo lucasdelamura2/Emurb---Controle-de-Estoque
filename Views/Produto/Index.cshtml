@@ -5,9 +5,14 @@
 }
 
 <h1>Produtos Cadastrados</h1>
-<p>
+
+<p class="d-flex gap-2">
     <a asp-action="Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i> Cadastrar Novo Produto
+    </a>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left-circle me-1"></i> Voltar para Principal
     </a>
 </p>
 
