@@ -73,9 +73,19 @@
 
             <div id="topnav" class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li><a class="nav-link active" asp-controller="Home" asp-action="Index"> Principal</a></li>
-                    <li><a class="nav-link active" asp-controller="Usuario" asp-action="Index"> Usuários</a></li>                   
-                </ul>
+                    <li>
+                        <a class="nav-link active" asp-controller="Home" asp-action="Index"> Principal
+                        </a>
+                    </li>
+                    
+                    @if (Context.Session.GetString("IsAdmin") == "True")
+                    {
+                        <li>
+                            <a class="nav-link" asp-controller="Usuario" asp-action="Index"> Usuários
+                            </a>
+                        </li>
+                    }
+                    </ul>
                 
                 <div class="navbar-nav ms-auto">
                     <a asp-controller="Login" asp-action="Logout" class="btn btn-danger">

@@ -30,15 +30,12 @@ namespace EmurbEstoque.Controllers
             if (usuario == null)
             {
                 ViewBag.Error = "E-mail ou senha inválidos. Tente novamente.";
-                return View("Index"); 
+                return View("Index");
             }
 
             HttpContext.Session.SetInt32("UsuarioId", usuario.IdUsuario);
-            
-            if (usuario.FuncionarioId.HasValue)
-            {
-                HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
-            }
+            HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
+            HttpContext.Session.SetString("IsAdmin", usuario.IsAdmin.ToString()); 
 
             return RedirectToAction("Index", "Home");
         }

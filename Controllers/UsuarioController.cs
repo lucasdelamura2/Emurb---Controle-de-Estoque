@@ -71,20 +71,34 @@ namespace EmurbEstoque.Controllers
                 return NotFound();
             }
             
+            var viewModel = new UsuarioEditViewModel
+            {
+                IdUsuario = usuario.IdUsuario,
+                Email = usuario.Email,
+                FuncionarioId = usuario.FuncionarioId,
+                IsAdmin = usuario.IsAdmin,
+                IsAtivo = usuario.IsAtivo
+            };
+            
             PrepararViewBagFuncionarios(); 
-            return View(usuario); 
+            return View(viewModel); 
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, Usuario usuario)
+        public IActionResult Edit(int id, UsuarioEditViewModel viewModel) 
         {
-            usuario.IdUsuario = id;
-            ModelState.Remove("Senha");
+            viewModel.IdUsuario = id;
+
+            if (string.IsNullOrEmpty(viewModel.NovaSenha))
+            {
+                ModelState.Remove("NovaSenha");
+                ModelState.Remove("ConfirmarSenha");
+            }
 
             if (!ModelState.IsValid)
             {
                 PrepararViewBagFuncionarios();
-                return View(usuario);
+                return View(viewModel); 
             }
 
             var usuarioExistente = _usuarioRepository.GetById(id);
@@ -93,54 +107,23 @@ namespace EmurbEstoque.Controllers
                 return NotFound();
             }
             
-            usuario.Senha = usuarioExistente.Senha;
-            
-            if (usuarioExistente.Email != usuario.Email && _usuarioRepository.EmailExists(usuario.Email))
+            if (usuarioExistente.Email != viewModel.Email && _usuarioRepository.EmailExists(viewModel.Email))
             {
                 ModelState.AddModelError("Email", "Este e-mail já está em uso por outra conta.");
                 PrepararViewBagFuncionarios();
-                return View(usuario);
-            }
-
-            _usuarioRepository.Update(usuario);
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public IActionResult ResetPassword(int id)
-        {
-            var usuario = _usuarioRepository.GetById(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new ResetPasswordViewModel
-            {
-                IdUsuario = usuario.IdUsuario,
-                Email = usuario.Email
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult ResetPassword(ResetPasswordViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
                 return View(viewModel);
             }
+            
+            usuarioExistente.Email = viewModel.Email;
+            usuarioExistente.FuncionarioId = viewModel.FuncionarioId;
+            usuarioExistente.IsAdmin = viewModel.IsAdmin;
+            usuarioExistente.IsAtivo = viewModel.IsAtivo;
 
-            var usuario = _usuarioRepository.GetById(viewModel.IdUsuario);
-            if (usuario == null)
+            if (!string.IsNullOrEmpty(viewModel.NovaSenha))
             {
-                return NotFound();
+                usuarioExistente.Senha = viewModel.NovaSenha;
             }
-
-            usuario.Senha = viewModel.NovaSenha;
-            _usuarioRepository.Update(usuario);
-
+            _usuarioRepository.Update(usuarioExistente);
             return RedirectToAction(nameof(Index));
         }
 

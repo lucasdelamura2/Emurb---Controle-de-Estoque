@@ -1,4 +1,4 @@
-@model EmurbEstoque.Models.Usuario
+@model EmurbEstoque.Models.ViewModels.UsuarioEditViewModel
 @{
     ViewData["Title"] = "Editar Usuário";
     Layout = "~/Views/_Layout.cshtml";
@@ -12,12 +12,13 @@
 
     <input type="hidden" asp-for="IdUsuario" />
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label asp-for="Email" class="form-label"></label>
-            <input asp-for="Email" class="form-control" type="email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+    <div class="row g-3 p-3 border rounded mb-4">
+        <h3 class="h5">Dados da Conta</h3>
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" type="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
         
         <div class="col-md-6">
             <label asp-for="FuncionarioId" class="form-label"></label>
@@ -37,6 +38,23 @@
                 <label asp-for="IsAtivo" class="form-check-label"></label>
             </div>
         </div>
+    </div>
+
+    <div class="row g-3 p-3 border rounded mb-4">
+        <h3 class="h5">Redefinir Senha</h3>
+            <div class="col-12">
+                <p class="text-muted small">Deixe os campos abaixo em branco para *não* alterar a senha atual.</p>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NovaSenha" class="form-label"></label>
+                <input asp-for="NovaSenha" class="form-control" />
+                <span asp-validation-for="NovaSenha" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ConfirmarSenha" class="form-label"></label>
+                <input asp-for="ConfirmarSenha" class="form-control" />
+                <span asp-validation-for="ConfirmarSenha" class="text-danger"></span>
+            </div>
     </div>
 
     <div class="mt-4">
