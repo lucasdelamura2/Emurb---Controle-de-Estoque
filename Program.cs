@@ -23,7 +23,7 @@ builder.Services.AddTransient<IEstoqueRepository>(_ =>
         new ItensOSDatabaseRepository(connectionString)
     ));
 builder.Services.AddTransient<IOrdemSaidaRepository>(_ => new OrdemSaidaDatabaseRepository(connectionString));
-
+builder.Services.AddTransient<IUsuarioRepository>(_ => new UsuarioDatabaseRepository(connectionString));
 // builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioMemoryRepository>();
 // builder.Services.AddSingleton<IProdutoRepository, ProdutoMemoryRepository>(); 
 // builder.Services.AddSingleton<IFornecedorRepository, FornecedorMemoryRepository>();
@@ -35,7 +35,12 @@ builder.Services.AddTransient<IOrdemSaidaRepository>(_ => new OrdemSaidaDatabase
 //builder.Services.AddSingleton<IOrdemSaidaRepository, OrdemSaidaMemoryRepository>();    
 //builder.Services.AddSingleton<IItensOSRepository, ItensOSMemoryRepository>();
 //builder.Services.AddSingleton<IEstoqueRepository, EstoqueMemoryRepository>();
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8); // Define o tempo da sessão
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
@@ -45,6 +50,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
