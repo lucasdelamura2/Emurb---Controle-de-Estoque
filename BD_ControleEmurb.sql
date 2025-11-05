@@ -46,6 +46,8 @@ CREATE TABLE OrdemEntrada
     fornId   INT      NOT NULL,
     dataEnt  DATETIME NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (fornId) REFERENCES Fornecedores(idFornecedor)
+    status VARCHAR(20) NOT NULL DEFAULT 'Aberta'
+    CONSTRAINT CK_OrdemEntrada_Status CHECK (status IN ('Aberta', 'Concluída'))
 )
 GO
 
@@ -96,6 +98,8 @@ CREATE TABLE OrdemSaida
     dataSaida  DATETIME NOT NULL DEFAULT GETDATE(), 
     CONSTRAINT FK_OrdemSaida_Funcionarios FOREIGN KEY (funcId) REFERENCES Pessoas(idPessoa), 
     CONSTRAINT FK_OrdemSaida_Autorizacao FOREIGN KEY (autorizaId) REFERENCES Autorizacao(idAutoriza)
+    status VARCHAR(20) NOT NULL DEFAULT 'Aberta'
+    CONSTRAINT CK_OrdemSaida_Status CHECK (status IN ('Aberta', 'Concluída'))
 )
 GO
 
