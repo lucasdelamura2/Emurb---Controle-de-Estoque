@@ -2,13 +2,18 @@
 @{
     ViewData["Title"] = "Funções Autorizadas";
     Layout = "~/Views/_Layout.cshtml"; 
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "True";
 }
 
 <h1>Funções Autorizadas</h1>
-<p>
+<p class="d-flex gap-2">
+
+    @if (isAdmin)
+    {
     <a asp-action="Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i> Cadastrar Nova Função
     </a>
+    }
     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
         <i class="bi bi-arrow-left-circle me-1"></i> Voltar para Principal
     </a>
@@ -19,7 +24,11 @@
         <tr>
             <th>ID</th>
             <th>Função / Cargo</th>
-            <th>Ações</th> </tr>
+            @if (isAdmin)
+            {
+            <th>Ações</th> 
+            }
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model) 
@@ -27,6 +36,8 @@
             <tr>
                 <td>@item.IdAutorizado</td>
                 <td>@item.Funcao</td>
+                @if (isAdmin)
+                {
                 <td class="text-nowrap">
                     <a asp-action="Edit" asp-route-id="@item.IdAutorizado" class="btn btn-sm btn-outline-warning" title="Editar">
                         <i class="bi bi-pencil-square"></i>
@@ -36,6 +47,7 @@
                         <i class="bi bi-trash"></i>
                     </a>
                 </td>
+                }
             </tr>
         }
     </tbody>

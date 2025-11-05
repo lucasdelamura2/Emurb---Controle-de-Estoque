@@ -3,14 +3,20 @@
 @{
     ViewData["Title"] = "Fornecedores";
     Layout = "~/Views/_Layout.cshtml";
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "True";
 }
 
 <h1>Fornecedores</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Adicionar Fornecedor
-    </a>
+<p class="d-flex gap-2">
+
+    @if (isAdmin)
+    {
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Adicionar Fornecedor
+        </a>
+    }
+
     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
         <i class="bi bi-arrow-left-circle me-1"></i> Voltar para Principal
     </a>
@@ -25,7 +31,11 @@
             <th>Email</th>
             <th>Telefone</th>
             <th>Inscrição Estadual</th>
-            <th>Ações</th>
+            
+            @if (isAdmin)
+            {
+                <th>Ações</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -38,18 +48,22 @@
                 <td>@f.Email</td>
                 <td>@f.Telefone</td>
                 <td>@f.InscricaoEstadual</td>
-                <td class="text-nowrap">
-                    <a asp-action="Details" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-primary" title="Detalhes">
-                        <i class="bi bi-search"></i>
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-warning" title="Editar">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-danger" title="Excluir"
-                       onclick="return confirm('Tem certeza que deseja excluir este fornecedor?');">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
+
+                @if (isAdmin)
+                {
+                    <td class="text-nowrap">
+                        <a asp-action="Details" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-primary" title="Detalhes">
+                            <i class="bi bi-search"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-warning" title="Editar">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-danger" title="Excluir"
+                           onclick="return confirm('Tem certeza que deseja excluir este fornecedor?');">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                }
             </tr>
         }
     </tbody>
