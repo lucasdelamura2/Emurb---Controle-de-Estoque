@@ -4,13 +4,18 @@
     Layout = "~/Views/_Layout.cshtml";
     var nomesAutorizados = ViewBag.NomesAutorizados as Dictionary<int, string>;
     var nomesLocais = ViewBag.NomesLocais as Dictionary<int, string>;
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "True";
 }
 
 <h1>Autorizações (Função x Local)</h1>
-<p>
+<p class="d-flex gap-2">
+
+    @if (isAdmin)
+    {
     <a asp-action="Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i> Criar Nova Autorização
     </a>
+    }
     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
         <i class="bi bi-arrow-left-circle me-1"></i> Voltar para Principal
     </a>
@@ -21,7 +26,11 @@
         <tr>
             <th>Função Autorizada</th>
             <th>Local de Destino</th>
-            <th>Ações</th> </tr>
+            @if (isAdmin)
+            {
+            <th>Ações</th> 
+            }
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -33,12 +42,15 @@
                 <td>
                     @(nomesLocais != null && nomesLocais.ContainsKey(item.LocalId) ? nomesLocais[item.LocalId] : "Local não encontrado")
                 </td>
+                @if (isAdmin)
+                {
                 <td class="text-nowrap">
                     <a asp-action="Delete" asp-route-id="@item.IdAutoriza" class="btn btn-sm btn-outline-danger" title="Excluir"
                        onclick="return confirm('Tem certeza que deseja excluir esta autorização?');">
                         <i class="bi bi-trash"></i>
                     </a>
                 </td>
+                }
             </tr>
         }
     </tbody>
