@@ -5,10 +5,10 @@ namespace EmurbEstoque.Repositories
 {
     public interface IFornecedorRepository
     {
-        void Create(Fornecedor fornecedor);
+        int Create(Fornecedor fornecedor);
         List<Fornecedor> Read();
         Fornecedor? Read(int id);       
-        void Update(Fornecedor fornecedor);
-        void Delete(int id);
+        int Update(Fornecedor fornecedor);
+        int Delete(int id);
     }
 }

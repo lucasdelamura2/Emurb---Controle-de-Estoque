@@ -4,8 +4,6 @@
     Layout = "~/Views/_Layout.cshtml";
     var nomesProdutos = ViewBag.NomesProdutos as Dictionary<int, string>;
     var lotesInfo = ViewBag.LotesInfo as Dictionary<int, EmurbEstoque.Models.Lote>;
-    
-    // Variável para facilitar a leitura
     bool isAberta = Model.Ordem.Status == "Aberta";
 }
 

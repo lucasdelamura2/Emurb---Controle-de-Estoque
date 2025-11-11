@@ -2,6 +2,7 @@ using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace EmurbEstoque.Repositories
 {
@@ -9,22 +10,30 @@ namespace EmurbEstoque.Repositories
     {
         public ItensOSDatabaseRepository(string connStr) : base(connStr) { }
 
-        public void Create(ItensOS itemOS)
+        public void Create(ItensOS item)
         {
-            if (itemOS == null)
-                 throw new ArgumentNullException(nameof(itemOS));
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = @"
-                INSERT INTO ItensOS (ordsaiId, loteId, qtd)
-                VALUES (@ordsaiId, @loteId, @qtd);
-            ";
-            cmd.Parameters.AddWithValue("@ordsaiId", itemOS.OrdSaiId);
-            cmd.Parameters.AddWithValue("@loteId", itemOS.LoteId);
-            cmd.Parameters.AddWithValue("@qtd", itemOS.Qtd);
-
-            cmd.ExecuteNonQuery();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "INSERT INTO ItensOS (ordsaiId, loteId, qtd) VALUES (@ordsaiId, @loteId, @qtd)";
+                
+                cmd.Parameters.AddWithValue("@ordsaiId", item.OrdSaiId);
+                cmd.Parameters.AddWithValue("@loteId", item.LoteId);
+                cmd.Parameters.AddWithValue("@qtd", item.Qtd);
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Contains("Saldo de estoque insuficiente"))
+                {
+                    throw new Exception("Erro: Saldo de estoque insuficiente para esta saída.");
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         public List<ItensOS> GetAll()

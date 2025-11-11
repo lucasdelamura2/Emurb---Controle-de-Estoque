@@ -1,6 +1,7 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic; 
+using System.Data;
 
 namespace EmurbEstoque.Repositories
 {
@@ -8,27 +9,34 @@ namespace EmurbEstoque.Repositories
     {
         public FornecedorDatabaseRepository(string connStr) : base(connStr) { }
 
-        public void Create(Fornecedor fornecedor)
+        public int Create(Fornecedor fornecedor)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                INSERT INTO Pessoas (nome, cpf_cnpj, email, telefone) 
-                VALUES (@nome, @cpf_cnpj, @email, @tel);
-
-                DECLARE @newId INT = SCOPE_IDENTITY();
-                
-                INSERT INTO Fornecedores (idFornecedor, inscricao_estadual)
-                VALUES (@newId, @insc_estadual);
-            ";
+            cmd.CommandText = "cadFornecedor";
+            cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@nome", fornecedor.Nome);
             cmd.Parameters.AddWithValue("@cpf_cnpj", fornecedor.CpfCnpj);
             cmd.Parameters.AddWithValue("@email", fornecedor.Email);
-            cmd.Parameters.AddWithValue("@tel", fornecedor.Telefone);
-            cmd.Parameters.AddWithValue("@insc_estadual", fornecedor.InscricaoEstadual);
+            cmd.Parameters.AddWithValue("@telefone", fornecedor.Telefone);
+            cmd.Parameters.AddWithValue("@inscricao_estadual", fornecedor.InscricaoEstadual);
 
-            cmd.ExecuteNonQuery();
+            var returnParameter = new SqlParameter();
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                int statusCode = (int)returnParameter.Value;
+                return statusCode;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message); 
+                return 2;
+            }
         }
 
         public List<Fornecedor> Read()
@@ -90,43 +98,60 @@ namespace EmurbEstoque.Repositories
             return null;
         }
 
-        public void Update(Fornecedor fornecedor)
+        public int Update(Fornecedor fornecedor)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                UPDATE Pessoas SET
-                    nome = @nome,
-                    cpf_cnpj = @cpf_cnpj,
-                    email = @email,
-                    telefone = @tel
-                WHERE idPessoa = @id;
+            cmd.CommandText = "alterFornecedor"; 
+            cmd.CommandType = CommandType.StoredProcedure;
 
-                UPDATE Fornecedores SET
-                    inscricao_estadual = @insc_estadual
-                WHERE idFornecedor = @id;
-            ";
-
-            cmd.Parameters.AddWithValue("@id", fornecedor.IdFornecedor);
+            cmd.Parameters.AddWithValue("@idFornecedor", fornecedor.IdFornecedor);
             cmd.Parameters.AddWithValue("@nome", fornecedor.Nome);
             cmd.Parameters.AddWithValue("@cpf_cnpj", fornecedor.CpfCnpj);
             cmd.Parameters.AddWithValue("@email", fornecedor.Email);
-            cmd.Parameters.AddWithValue("@tel", fornecedor.Telefone);
-            cmd.Parameters.AddWithValue("@insc_estadual", fornecedor.InscricaoEstadual);
+            cmd.Parameters.AddWithValue("@telefone", fornecedor.Telefone);
+            cmd.Parameters.AddWithValue("@inscricao_estadual", fornecedor.InscricaoEstadual);
 
-            cmd.ExecuteNonQuery();
+            var returnParameter = new SqlParameter();
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                int statusCode = (int)returnParameter.Value; 
+                return statusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 2; 
+            }
         }
 
-        public void Delete(int id)
+        public int Delete(int id)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                DELETE FROM Fornecedores WHERE idFornecedor = @id;
-                DELETE FROM Pessoas WHERE idPessoa = @id;
-            ";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
+            cmd.CommandText = "delFornecedor"; 
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@idFornecedor", id);
+            var returnParameter = new SqlParameter();
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                int statusCode = (int)returnParameter.Value;
+                return statusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 2;
+            }
         }
-    }
+    }    
 }
