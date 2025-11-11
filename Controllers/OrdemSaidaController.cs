@@ -138,23 +138,28 @@ namespace EmurbEstoque.Controllers
             {
                 return RedirectToAction(nameof(Details), new { id = NovoItemForm.OrdSaiId });
             }
-
             var todosItensSaida = _itensOSRepository.GetAll();
             var loteEntrada = _loteRepository.GetById(NovoItemForm.LoteId);
             int qtdJaSaiu = todosItensSaida
-                              .Where(i => i.LoteId == NovoItemForm.LoteId)
-                              .Sum(i => i.Qtd);
+                                .Where(i => i.LoteId == NovoItemForm.LoteId)
+                                .Sum(i => i.Qtd);
             int saldoDisponivel = (loteEntrada?.Qtd ?? 0) - qtdJaSaiu;
-
             if (NovoItemForm.Qtd > saldoDisponivel)
             {
                 ModelState.AddModelError("NovoItemForm.Qtd", $"Quantidade indisponível. Saldo atual do lote: {saldoDisponivel}");
             }
-
             if (ModelState.IsValid)
             {
-                _itensOSRepository.Create(NovoItemForm);
-                return RedirectToAction(nameof(Details), new { id = NovoItemForm.OrdSaiId });
+                try
+                {
+                    _itensOSRepository.Create(NovoItemForm);
+                    return RedirectToAction(nameof(Details), new { id = NovoItemForm.OrdSaiId });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return PrepararDetailsView(NovoItemForm.OrdSaiId, NovoItemForm);
+                }
             }
             else
             {
