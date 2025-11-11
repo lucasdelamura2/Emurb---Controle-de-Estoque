@@ -5,10 +5,10 @@ namespace EmurbEstoque.Repositories
 {
     public interface IFuncionarioRepository
     {
-        void Create(Funcionario funcionario);
+        int Create(Funcionario funcionario);
         List<Funcionario> Read(); 
         Funcionario? Read(int id);        
-        void Update(Funcionario funcionario);
-        void Delete(int id);
+        int Update(Funcionario funcionario);
+        int Delete(int id);
     }
 }

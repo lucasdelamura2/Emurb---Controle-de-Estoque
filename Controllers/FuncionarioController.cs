@@ -11,10 +11,12 @@ namespace EmurbEstoque.Controllers
         {
             _repository = repository;
         }
+
         public IActionResult Index()
         {
             return View(_repository.Read().OrderBy(f => f.IdFuncionario).ToList());
         }
+
         [HttpGet]
         public IActionResult Create() => View();
 
@@ -26,9 +28,26 @@ namespace EmurbEstoque.Controllers
                 return View(funcionario);
             }
 
-            _repository.Create(funcionario);
-            return RedirectToAction(nameof(Index));
+            int statusCode = _repository.Create(funcionario);
+            if (statusCode == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else if (statusCode == 1)
+            {
+                ViewBag.Error = "Este funcionário (CPF/CNPJ) já está cadastrado.";
+            }
+            else if (statusCode == 3) 
+            {
+                ViewBag.Error = "O e-mail informado já está em uso por outra pessoa.";
+            }
+            else
+            {
+                ViewBag.Error = "Problemas no cadastro do funcionário. Verifique os dados ou contate o administrador.";
+            }
+            return View(funcionario);
         }
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -36,6 +55,7 @@ namespace EmurbEstoque.Controllers
             if (f is null) return NotFound();
             return View(f);
         }
+
         [HttpPost]
         public IActionResult Edit(int id, Funcionario dados)
         {
@@ -43,15 +63,35 @@ namespace EmurbEstoque.Controllers
             {
                 return View(dados);
             }
-
-            dados.IdFuncionario = id;          
-            _repository.Update(dados);
-            return RedirectToAction(nameof(Index));
+            dados.IdFuncionario = id;           
+            int statusCode = _repository.Update(dados);
+            if (statusCode == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else if (statusCode == 3)
+            {
+                ViewBag.Error = "O e-mail informado já está em uso por outra pessoa.";
+            }
+            else
+            {
+                ViewBag.Error = "Problemas ao alterar o funcionário. Verifique os dados ou contate o administrador.";
+            }
+            return View(dados);
         }
 
         public IActionResult Delete(int id)
         {
-            _repository.Delete(id);
+            int statusCode = _repository.Delete(id);
+
+            if (statusCode == 1) 
+            {
+                TempData["Error"] = "Este funcionário não pode ser excluído, pois está em uso.";
+            }
+            else if (statusCode == 2) 
+            {
+                TempData["Error"] = "Houve um problema ao excluir o funcionário.";
+            }
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Details(int id)

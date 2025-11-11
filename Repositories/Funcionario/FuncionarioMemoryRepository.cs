@@ -9,17 +9,19 @@ namespace EmurbEstoque.Repositories
     {
         public static readonly List<Funcionario> _mem = new();
         private static int _nextId = 1;
-        public void Create(Funcionario funcionario)
+        public int Create(Funcionario funcionario)
         {
             if (funcionario == null) throw new ArgumentNullException(nameof(funcionario));
 
-            funcionario.IdPessoa = _nextId++; 
+            funcionario.IdPessoa = _nextId++;
             _mem.Add(funcionario);
+            return 0; 
         }
-        public void Delete(int id)
+        public int Delete(int id)
         {
             var f = Read(id);
             if (f != null) _mem.Remove(f);
+            return 0;
         }
         public List<Funcionario> Read()
         {
@@ -29,16 +31,17 @@ namespace EmurbEstoque.Repositories
         {
             return _mem.FirstOrDefault(x => x.IdPessoa == id);
         }
-        public void Update(Funcionario dados)
+        public int Update(Funcionario dados)
         {
             var f = Read(dados.IdPessoa); 
-            if (f == null) return;
+            if (f == null) return 0;
             f.Nome = dados.Nome;
             f.CpfCnpj = dados.CpfCnpj;
             f.Email = dados.Email;
             f.Telefone = dados.Telefone;
             f.Cargo = dados.Cargo;
             f.Setor = dados.Setor;
+            return 0;
         }
     }
 }

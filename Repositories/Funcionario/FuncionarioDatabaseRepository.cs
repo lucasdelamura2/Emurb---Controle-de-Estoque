@@ -1,6 +1,7 @@
 using EmurbEstoque.Models;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic; 
+using System.Data;
 
 namespace EmurbEstoque.Repositories
 {
@@ -8,27 +9,28 @@ namespace EmurbEstoque.Repositories
     {
         public FuncionarioDatabaseRepository(string connStr) : base(connStr) { }
 
-        public void Create(Funcionario funcionario)
+        public int Create(Funcionario model) 
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                INSERT INTO Pessoas (nome, cpf_cnpj, email, telefone) 
-                VALUES (@nome, @cpf, @email, @tel);
+            cmd.CommandText = "cadFuncionario";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-                DECLARE @newId INT = SCOPE_IDENTITY();
-                
-                INSERT INTO Funcionarios (idFuncionario, cargo, setor)
-                VALUES (@newId, @cargo, @setor);
-            ";
-            cmd.Parameters.AddWithValue("@nome", funcionario.Nome);
-            cmd.Parameters.AddWithValue("@cpf", funcionario.CpfCnpj); 
-            cmd.Parameters.AddWithValue("@email", funcionario.Email);
-            cmd.Parameters.AddWithValue("@tel", funcionario.Telefone);
-            cmd.Parameters.AddWithValue("@cargo", funcionario.Cargo);
-            cmd.Parameters.AddWithValue("@setor", funcionario.Setor);
+            cmd.Parameters.AddWithValue("@nome", model.Nome);
+            cmd.Parameters.AddWithValue("@cpf_cnpj", model.CpfCnpj);
+            cmd.Parameters.AddWithValue("@email", model.Email);
+            cmd.Parameters.AddWithValue("@telefone", model.Telefone);
+            cmd.Parameters.AddWithValue("@cargo", model.Cargo);
+            cmd.Parameters.AddWithValue("@setor", model.Setor);
 
+            var returnParameter = new SqlParameter();
+            returnParameter.ParameterName = "@ReturnCode";
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
             cmd.ExecuteNonQuery();
+            int statusCode = (int)returnParameter.Value;
+            return statusCode;
         }
         public List<Funcionario> Read()
         {
@@ -89,44 +91,62 @@ namespace EmurbEstoque.Repositories
             }
             return null;
         }
-        public void Update(Funcionario funcionario)
+        public int Update(Funcionario model)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                UPDATE Pessoas SET
-                    nome = @nome,
-                    cpf_cnpj = @cpf,
-                    email = @email,
-                    telefone = @tel
-                WHERE idPessoa = @id;
+            cmd.CommandText = "alterFuncionario";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-                UPDATE Funcionarios SET
-                    cargo = @cargo,
-                    setor = @setor
-                WHERE idFuncionario = @id;
-            ";
+            cmd.Parameters.AddWithValue("@idFuncionario", model.IdFuncionario);
+            cmd.Parameters.AddWithValue("@nome", model.Nome);
+            cmd.Parameters.AddWithValue("@cpf_cnpj", model.CpfCnpj);
+            cmd.Parameters.AddWithValue("@email", model.Email);
+            cmd.Parameters.AddWithValue("@telefone", model.Telefone);
+            cmd.Parameters.AddWithValue("@cargo", model.Cargo);
+            cmd.Parameters.AddWithValue("@setor", model.Setor);
 
-            cmd.Parameters.AddWithValue("@id", funcionario.IdFuncionario);
-            cmd.Parameters.AddWithValue("@nome", funcionario.Nome);
-            cmd.Parameters.AddWithValue("@cpf", funcionario.CpfCnpj);
-            cmd.Parameters.AddWithValue("@email", funcionario.Email);
-            cmd.Parameters.AddWithValue("@tel", funcionario.Telefone);
-            cmd.Parameters.AddWithValue("@cargo", funcionario.Cargo);
-            cmd.Parameters.AddWithValue("@setor", funcionario.Setor);
+            var returnParameter = new SqlParameter();
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
 
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
+
+                int statusCode = (int)returnParameter.Value;
+                return statusCode;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 2;
+            }
         }
-        public void Delete(int id)
+        public int Delete(int id)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = @"
-                DELETE FROM Funcionarios WHERE idFuncionario = @id;
-                DELETE FROM Pessoas WHERE idPessoa = @id;
-            ";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
+            cmd.CommandText = "delFuncionario"; 
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@idFuncionario", id);
+
+            var returnParameter = new SqlParameter();
+            returnParameter.SqlDbType = SqlDbType.Int;
+            returnParameter.Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add(returnParameter);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                int statusCode = (int)returnParameter.Value;
+                return statusCode; 
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 2; 
+            }
         }
     }
 }

@@ -9,6 +9,10 @@
 
 <h1>Funcionários</h1> 
 
+@if(TempData["Error"] != null) {
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <p class="d-flex gap-2">
     @if (isAdmin)
     {
