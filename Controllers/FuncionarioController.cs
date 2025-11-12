@@ -75,7 +75,7 @@ namespace EmurbEstoque.Controllers
             }
             else
             {
-                ViewBag.Error = "Problemas ao alterar o funcionário. Verifique os dados ou contate o administrador.";
+                ViewBag.Error = "Problemas ao alterar o funcionário. Esse CPF/CNPJ já está sendo utilizado.";
             }
             return View(dados);
         }
