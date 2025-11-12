@@ -41,7 +41,7 @@
                 {
                     ViewBag.Error = "Este fornecedor (CPF/CNPJ) já está cadastrado.";
                 }
-                else if (statusCode == 3)
+                else if (statusCode == 2)
                 {
                     ViewBag.Error = "O e-mail informado já está em uso por outra pessoa.";
                 }
