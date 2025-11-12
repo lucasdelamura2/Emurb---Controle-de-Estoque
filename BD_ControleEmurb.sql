@@ -1,8 +1,7 @@
-
-CREATE DATABASE ControleEmurb
+CREATE DATABASE EstoqueEmurb
 GO
 
-USE ControleEmurb
+USE EstoqueEmurb
 GO
 
 CREATE TABLE Pessoas
@@ -10,10 +9,14 @@ CREATE TABLE Pessoas
     idPessoa INT          NOT NULL PRIMARY KEY IDENTITY,
     nome     VARCHAR(75) NOT NULL,                          
     cpf_cnpj VARCHAR(20)  NOT NULL UNIQUE,                
-    email    VARCHAR(50) NOT NULL,                           
+    email    VARCHAR(50) NOT NULL  UNIQUE,                           
     telefone VARCHAR(20)  NOT NULL                       
 )
 GO
+
+alter table Pessoas
+add unique (email)
+
 
 CREATE TABLE Funcionarios
 (
@@ -45,8 +48,8 @@ CREATE TABLE OrdemEntrada
     idOrdEnt INT      NOT NULL PRIMARY KEY IDENTITY,
     fornId   INT      NOT NULL,
     dataEnt  DATETIME NOT NULL DEFAULT GETDATE(),
-    FOREIGN KEY (fornId) REFERENCES Fornecedores(idFornecedor)
-    status VARCHAR(20) NOT NULL DEFAULT 'Aberta'
+    FOREIGN KEY (fornId) REFERENCES Fornecedores(idFornecedor),
+    status VARCHAR(20) NOT NULL DEFAULT 'Aberta',
     CONSTRAINT CK_OrdemEntrada_Status CHECK (status IN ('Aberta', 'Concluída'))
 )
 GO
@@ -97,8 +100,8 @@ CREATE TABLE OrdemSaida
     autorizaId INT      NOT NULL,
     dataSaida  DATETIME NOT NULL DEFAULT GETDATE(), 
     CONSTRAINT FK_OrdemSaida_Funcionarios FOREIGN KEY (funcId) REFERENCES Pessoas(idPessoa), 
-    CONSTRAINT FK_OrdemSaida_Autorizacao FOREIGN KEY (autorizaId) REFERENCES Autorizacao(idAutoriza)
-    status VARCHAR(20) NOT NULL DEFAULT 'Aberta'
+    CONSTRAINT FK_OrdemSaida_Autorizacao FOREIGN KEY (autorizaId) REFERENCES Autorizacao(idAutoriza),
+    status VARCHAR(20) NOT NULL DEFAULT 'Aberta',
     CONSTRAINT CK_OrdemSaida_Status CHECK (status IN ('Aberta', 'Concluída'))
 )
 GO
