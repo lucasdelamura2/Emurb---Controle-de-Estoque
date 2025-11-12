@@ -137,7 +137,7 @@ else
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="idItemOS" value="@item.IdItemOS" />
                             <input type="hidden" name="idOrdemSaida" value="@Model.Ordem.IdOrdSai" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Remover Item"
+                            <button type="submit" class="btn btn-sm btn-danger" title="Remover Item"
                                     onclick="return confirm('Tem certeza que deseja remover este item da ordem?');">
                                 <i class="bi bi-trash"></i>
                             </button>

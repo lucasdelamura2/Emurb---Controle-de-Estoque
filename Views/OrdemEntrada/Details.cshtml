@@ -145,7 +145,7 @@ else
                 {
                     <td class="text-nowrap">
                         <a asp-controller="OrdemEntrada" asp-action="EditarLote" asp-route-id="@item.IdLote"
-                           class="btn btn-sm btn-outline-warning" title="Editar Lote">
+                           class="btn btn-sm btn-warning" title="Editar Lote">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         
@@ -153,7 +153,7 @@ else
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="idLote" value="@item.IdLote" />
                             <input type="hidden" name="idOrdemEntrada" value="@Model.Ordem.IdOrdEnt" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Remover Lote"
+                            <button type="submit" class="btn btn-sm btn-danger" title="Remover Lote"
                                     onclick="return confirm('Tem certeza que deseja remover este lote da ordem?');">
                                 <i class="bi bi-trash"></i>
                             </button>

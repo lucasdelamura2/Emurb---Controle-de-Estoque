@@ -17,10 +17,10 @@
     @if (isAdmin)
     {
         <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Adicionar Funcionário
+            <i class="bi bi-plus-circle me-1"></i> Cadastrar Funcionário
         </a>
     }
-    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
         <i class="bi bi-arrow-left-circle me-1"></i> Voltar para Principal
     </a>
 </p>
@@ -56,13 +56,13 @@
             @if (isAdmin)
             {
                 <td class="text-nowrap">
-                    <a asp-action="Details" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-primary" title="Detalhes">
+                    <a asp-action="Details" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-primary" title="Detalhes">
                         <i class="bi bi-search"></i>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-warning" title="Editar">
+                    <a asp-action="Edit" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-warning" title="Editar">
                         <i class="bi bi-pencil-square"></i>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-outline-danger" title="Excluir"
+                    <a asp-action="Delete" asp-route-id="@f.IdPessoa" class="btn btn-sm btn-danger" title="Excluir"
                        onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
                         <i class="bi bi-trash"></i>
                     </a>
