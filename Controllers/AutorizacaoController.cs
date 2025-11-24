@@ -61,5 +61,37 @@ namespace EmurbEstoque.Controllers
             _autorizacaoRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var autorizacao = _autorizacaoRepository.GetById(id);
+            if (autorizacao == null) return NotFound();
+
+            PrepararViewBags(); 
+            return View(autorizacao);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, Autorizacao autorizacao)
+        {
+            autorizacao.IdAutoriza = id;
+            if (!ModelState.IsValid)
+            {
+                PrepararViewBags();
+                return View(autorizacao);
+            }
+
+            try
+            {
+                _autorizacaoRepository.Update(autorizacao);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (InvalidOperationException ex) 
+            {
+                ModelState.AddModelError("", ex.Message);
+                PrepararViewBags();
+                return View(autorizacao);
+            }
+        }
     }
 }

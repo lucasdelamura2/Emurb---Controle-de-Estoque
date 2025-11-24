@@ -10,5 +10,6 @@ namespace EmurbEstoque.Repositories
         Autorizacao? GetById(int id); 
         void Delete(int id); 
         bool Exists(int autorizadoId, int localId);
+        void Update(Autorizacao autorizacao);
     }
 }

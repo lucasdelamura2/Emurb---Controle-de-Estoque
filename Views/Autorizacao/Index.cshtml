@@ -45,6 +45,9 @@
                 @if (isAdmin)
                 {
                 <td class="text-nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.IdAutoriza" class="btn btn-sm btn-warning" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
                     <a asp-action="Delete" asp-route-id="@item.IdAutoriza" class="btn btn-sm btn-danger" title="Excluir"
                        onclick="return confirm('Tem certeza que deseja excluir esta autorização?');">
                         <i class="bi bi-trash"></i>

@@ -46,5 +46,24 @@ namespace EmurbEstoque.Repositories
         {
             return _autorizacoesMem.Any(a => a.AutorizadoId == autorizadoId && a.LocalId == localId);
         }
+        public void Update(Autorizacao autorizacao)
+        {
+            if (autorizacao == null) throw new ArgumentNullException(nameof(autorizacao));
+
+            var autorizacaoExistente = GetById(autorizacao.IdAutoriza);
+            if (autorizacaoExistente == null)
+            {
+                throw new InvalidOperationException("Autorização não encontrada para atualização.");
+            }
+
+            if (Exists(autorizacao.AutorizadoId, autorizacao.LocalId) &&
+                (autorizacaoExistente.AutorizadoId != autorizacao.AutorizadoId ||
+                 autorizacaoExistente.LocalId != autorizacao.LocalId))
+            {
+                throw new InvalidOperationException("Esta combinação de Função e Local já existe.");
+            }
+            autorizacaoExistente.AutorizadoId = autorizacao.AutorizadoId;
+            autorizacaoExistente.LocalId = autorizacao.LocalId;
+        }
     }
 }
