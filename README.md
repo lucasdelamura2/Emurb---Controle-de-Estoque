@@ -6,7 +6,6 @@ Sistema simples para controle de estoque da Emurb, desenvolvido em **C# (.NET MV
 - Cadastro de produtos  
 - Registro de entrada e saída de estoque  
 - Consulta de quantidade disponível  
-- Relatórios básicos  
 - Scripts de banco de dados incluídos
 
 ## 🛠️ Tecnologias
