@@ -14,10 +14,6 @@ CREATE TABLE Pessoas
 )
 GO
 
-alter table Pessoas
-add unique (email)
-
-
 CREATE TABLE Funcionarios
 (
     idFuncionario INT         NOT NULL PRIMARY KEY, 
@@ -50,7 +46,7 @@ CREATE TABLE OrdemEntrada
     dataEnt  DATETIME NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (fornId) REFERENCES Fornecedores(idFornecedor),
     status VARCHAR(20) NOT NULL DEFAULT 'Aberta',
-    CONSTRAINT CK_OrdemEntrada_Status CHECK (status IN ('Aberta', 'Concluída'))
+    CONSTRAINT CK_OrdemEntrada_Status CHECK (status IN ('Aberta', 'ConcluÃ­da'))
 )
 GO
 
@@ -102,7 +98,7 @@ CREATE TABLE OrdemSaida
     CONSTRAINT FK_OrdemSaida_Funcionarios FOREIGN KEY (funcId) REFERENCES Pessoas(idPessoa), 
     CONSTRAINT FK_OrdemSaida_Autorizacao FOREIGN KEY (autorizaId) REFERENCES Autorizacao(idAutoriza),
     status VARCHAR(20) NOT NULL DEFAULT 'Aberta',
-    CONSTRAINT CK_OrdemSaida_Status CHECK (status IN ('Aberta', 'Concluída'))
+    CONSTRAINT CK_OrdemSaida_Status CHECK (status IN ('Aberta', 'ConcluÃ­da'))
 )
 GO
 
@@ -136,4 +132,5 @@ CREATE TABLE Estoque
     quantidadeAtual INT NOT NULL DEFAULT 0 CHECK (quantidadeAtual >= 0), 
     CONSTRAINT FK_Estoque_Produtos FOREIGN KEY (produtoId) REFERENCES Produtos(idProduto)
 )
+
 GO
