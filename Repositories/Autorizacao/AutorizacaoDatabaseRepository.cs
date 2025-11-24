@@ -131,5 +131,39 @@ namespace EmurbEstoque.Repositories
                 return count > 0;
             }
         }
+        public void Update(Autorizacao autorizacao)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var checkCommand = new SqlCommand(
+                    "SELECT COUNT(*) FROM Autorizacao WHERE autorizadoId = @autorizadoId AND localId = @localId AND idAutoriza != @id",
+                    connection
+                );
+                checkCommand.Parameters.AddWithValue("@autorizadoId", autorizacao.AutorizadoId);
+                checkCommand.Parameters.AddWithValue("@localId", autorizacao.LocalId);
+                checkCommand.Parameters.AddWithValue("@id", autorizacao.IdAutoriza);
+
+                int count = (int)checkCommand.ExecuteScalar();
+                if (count > 0)
+                {
+                    throw new InvalidOperationException("Esta combinação de Função e Local já existe.");
+                }
+
+                var command = new SqlCommand(
+                    @"UPDATE Autorizacao 
+                    SET autorizadoId = @autorizadoId, 
+                        localId = @localId 
+                    WHERE idAutoriza = @id",
+                    connection
+                );
+
+                command.Parameters.AddWithValue("@id", autorizacao.IdAutoriza);
+                command.Parameters.AddWithValue("@autorizadoId", autorizacao.AutorizadoId);
+                command.Parameters.AddWithValue("@localId", autorizacao.LocalId);
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

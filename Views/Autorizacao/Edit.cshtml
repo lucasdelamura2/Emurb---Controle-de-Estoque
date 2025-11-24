@@ -1,0 +1,42 @@
+@model EmurbEstoque.Models.Autorizacao
+@{
+    ViewData["Title"] = "Editar Autorização";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h1>Editar Autorização</h1>
+<p>Altere a permissão de retirada para a função e local selecionados.</p>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    
+    <input type="hidden" asp-for="IdAutoriza" />
+
+    <div class="mb-3">
+        <label asp-for="AutorizadoId" class="form-label">Função Autorizada</label>
+        <select asp-for="AutorizadoId" asp-items="ViewBag.ListaAutorizados" class="form-select">
+            <option value="">-- Selecione a Função/Cargo --</option>
+        </select>
+        <span asp-validation-for="AutorizadoId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LocalId" class="form-label">Local de Destino</label>
+        <select asp-for="LocalId" asp-items="ViewBag.ListaLocais" class="form-select">
+            <option value="">-- Selecione o Local/Destino --</option>
+        </select>
+        <span asp-validation-for="LocalId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save me-1"></i> Salvar Alterações
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-x-circle me-1"></i> Cancelar
+    </a>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
