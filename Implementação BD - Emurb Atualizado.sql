@@ -23,39 +23,38 @@ as
 begin
 	IF EXISTS (SELECT 1 FROM Pessoas WHERE email = @email)
     BEGIN
-        RETURN 3; -- Retorna 3 E-mail já existe
+        RETURN 3; 
     END
 	begin try
 		declare @codigo int
-		begin tran -- ***********
+		begin tran
 		set @codigo = isnull(dbo.getPessoa(@cpf_cnpj), 0)
-		if @codigo = 0 -- pessoa não cadastrada
+		if @codigo = 0 
 		begin
 			insert into pessoas values (@nome, @cpf_cnpj, @email, @telefone)
 			insert into funcionarios values (SCOPE_IDENTITY(), @cargo, @setor)
-			commit -- ***********
-			return 0 -- cliente cadastrado
+			commit 
+			return 0 
 		end
 		else
 		begin
-			-- pessoa já está cadastrada
 			if not exists (select * from funcionarios where idFuncionario = @codigo)
 			begin
 				insert into funcionarios values (@codigo, @cargo, @setor)
-				commit -- ***********
-				return 0 -- cliente cadastrado
+				commit 
+				return 0 
 			end
 			else
 			begin
-				rollback -- ***********
-				return 1 -- cliente já estava cadastrado
-			end -- fim else
-		end -- fim else
+				rollback 
+				return 1 
+			end 
+		end 
 	end try 
 	begin catch
 		rollback
 		raiserror ('Problemas no cadastro do cliente', 16, 1)
-		return 2 -- erro
+		return 2 
 	end catch
 end
 go
@@ -74,7 +73,7 @@ AS
 BEGIN
 	IF EXISTS (SELECT 1 FROM Pessoas WHERE email = @email AND idPessoa != @idFuncionario)
     BEGIN
-        RETURN 3 -- Retorna 3 E-mail já existe
+        RETURN 3 
     END
     SET NOCOUNT ON
     BEGIN TRY
@@ -111,7 +110,7 @@ BEGIN
        EXISTS (SELECT 1 FROM Usuarios WHERE funcionarioId = @idFuncionario)
     BEGIN
         RAISERROR('Este funcionário não pode ser excluído, pois está vinculado a Ordens de Saída ou é um Usuário do sistema.', 16, 1);
-        RETURN 1 -- Retorna 1  Em uso
+        RETURN 1 
     END
     BEGIN TRY
         BEGIN TRAN
@@ -121,12 +120,12 @@ BEGIN
         WHERE idPessoa = @idFuncionario
 
         COMMIT TRAN
-        RETURN 0 -- Sucesso
+        RETURN 0
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION
         RAISERROR ('Problemas ao excluir o funcionário.', 16, 1)
-        RETURN 2 -- Erro
+        RETURN 2 
     END CATCH
 END
 GO
@@ -144,34 +143,33 @@ begin
 	begin try
 
 		declare @codigo int
-		begin tran -- ***********
+		begin tran 
 		set @codigo = isnull(dbo.getPessoa(@cpf_cnpj), 0)
-		if @codigo = 0 -- pessoa não cadastrada
+		if @codigo = 0
 		begin
 			insert into pessoas values (@nome, @cpf_cnpj, @email, @telefone)
 			insert into fornecedores values (SCOPE_IDENTITY(), @inscricao_estadual)
-			commit -- ***********
-			return 0 -- fornecedor cadastrado
+			commit 
+			return 0 
 		end
 		else
 		begin
-			-- pessoa já está cadastrada
 			if not exists (select * from fornecedores where idFornecedor = @codigo)
 			begin
 				insert into fornecedores values (@codigo, @inscricao_estadual)
-				commit -- ***********
-				return 0 -- fornecedor cadastrado
+				commit 
+				return 0 
 			end
 			else
 			begin
-				rollback -- ***********
-				return 1 -- fornecedor já estava cadastrado
-			end -- fim else
-		end -- fim else
+				rollback 
+				return 1
+			end 
+		end 
 	end try 
 	begin catch
 		rollback
-		return 2 -- erro
+		return 2 
 	end catch
 end
 go
@@ -189,7 +187,7 @@ AS
 BEGIN
     IF EXISTS (SELECT 1 FROM Pessoas WHERE email = @email AND idPessoa != @idFornecedor)
     BEGIN
-        RETURN 3 -- Retorna 3 E-mail já existe
+        RETURN 3
     END
     SET NOCOUNT ON
     BEGIN TRY
@@ -222,7 +220,7 @@ BEGIN
     SET NOCOUNT ON
     IF EXISTS (SELECT 1 FROM OrdemEntrada WHERE fornId = @idFornecedor)
     BEGIN
-        RETURN 1 -- Retorna 1  Em uso
+        RETURN 1
     END
     BEGIN TRY
         BEGIN TRAN
@@ -231,11 +229,11 @@ BEGIN
         DELETE FROM Pessoas
         WHERE idPessoa = @idFornecedor
         COMMIT TRAN
-        RETURN 0 -- Sucesso
+        RETURN 0 
     END TRY
     BEGIN CATCH
         ROLLBACK TRAN
-        RETURN 2 -- Erro
+        RETURN 2 
     END CATCH
 END
 GO
